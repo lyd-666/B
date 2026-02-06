@@ -743,31 +743,44 @@ def generate_invalidation_conditions(trend_data):
     return conditions
 
 
-def get_institutional_theme_colors():
+def get_mario_theme_colors():
     """
-    生成机构级专业配色方案
-    Generate institutional professional color scheme
+    生成马里奥主题配色方案
+    Generate Mario theme color scheme
     
-    配色方案：专业、商务、稳重
-    - 基础色：深蓝色系（信任、稳定）
-    - 强调色：金色（贵金属、价值）
-    - 中性色：灰色系（专业、中立）
+    配色方案：活泼、有趣、易懂
+    - 基础色：马里奥红、天空蓝
+    - 强调色：金币黄、管道绿
+    - 装饰色：砖块棕
     """
-    # 机构级固定配色
+    # 马里奥主题配色
     colors = {
-        'primary': '#1a2332',      # 主色：深蓝灰
-        'secondary': '#2c3e50',    # 次色：商务蓝灰
-        'accent': '#d4af37',       # 强调：专业金色
-        'success': '#27ae60',      # 成功：绿色
-        'warning': '#f39c12',      # 警告：橙色
-        'danger': '#e74c3c',       # 危险：红色
+        'primary': '#E52521',      # 马里奥红（帽子）
+        'secondary': '#5C94FC',    # 天空蓝
+        'accent': '#FFDE59',       # 金币黄
+        'success': '#8BC34A',      # 管道绿
+        'warning': '#F39C12',      # 橙色
+        'danger': '#E74C3C',       # 火球红
         'text': '#2c3e50',         # 文本：深灰
-        'background': '#f8f9fa',   # 背景：浅灰
-        'border': '#d5d8dc',       # 边框：中灰
-        'theme_name': 'institutional'
+        'background': '#5C94FC',   # 背景：天空蓝
+        'border': '#D2691E',       # 边框：砖块棕
+        'theme_name': 'mario'
     }
     
     return colors
+
+
+def add_mario_explanation(technical_term, mario_explanation):
+    """
+    为技术术语添加马里奥的通俗解释
+    Add Mario's plain language explanation to technical terms
+    """
+    return f"""
+    <div class="term-explanation">
+        <div class="technical-term">📊 {technical_term}</div>
+        <div class="mario-says">🍄 马里奥说：{mario_explanation}</div>
+    </div>
+    """
 
 
 def generate_html_report(trend_data, conditions, risks, timestamp, df):
@@ -789,7 +802,7 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>黄金盘前计划 - {timestamp.strftime('%Y年%m月%d日')}</title>
+    <title>🍄 马里奥的黄金闯关指南 - {timestamp.strftime('%Y年%m月%d日')}</title>
     <style>
         * {{
             margin: 0;
@@ -799,7 +812,7 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
         
         body {{
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
-            background: #f5f7fa;
+            background: #5C94FC;
             min-height: 100vh;
             padding: 20px;
             line-height: 1.6;
@@ -809,57 +822,63 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
             max-width: 1000px;
             margin: 0 auto;
             background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            overflow: hidden;
         }}
         
         .header {{
-            background: #1a2332;
+            background: #E52521;
             color: white;
             padding: 30px 40px;
-            border-bottom: 3px solid #d4af37;
+            border-bottom: 5px solid #FFDE59;
+            position: relative;
         }}
         
         .header h1 {{
-            font-size: 28px;
+            font-size: 32px;
             margin-bottom: 8px;
-            font-weight: 600;
+            font-weight: 700;
             letter-spacing: 1px;
         }}
         
         .header .date {{
-            font-size: 14px;
-            opacity: 0.85;
+            font-size: 16px;
+            opacity: 0.95;
             font-weight: 400;
         }}
         
         .content {{
             padding: 40px;
+            background: #FFFEF7;
         }}
         
         .core-module {{
             margin-bottom: 30px;
             padding: 24px;
-            background: #ffffff;
-            border: 1px solid #e1e4e8;
-            border-left: 4px solid #d4af37;
+            background: #FFDE59;
+            border: 4px solid #D2691E;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }}
         
         .module-number {{
             display: inline-block;
-            width: 28px;
-            height: 28px;
-            background: #d4af37;
+            width: 32px;
+            height: 32px;
+            background: #E52521;
             color: white;
             text-align: center;
-            line-height: 28px;
+            line-height: 32px;
             border-radius: 50%;
             font-weight: 700;
-            font-size: 14px;
-            margin-right: 10px;
+            font-size: 16px;
+            margin-right: 12px;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }}
         
         .module-title {{
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
             color: #1a2332;
             margin-bottom: 16px;
@@ -873,18 +892,44 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
             line-height: 1.8;
         }}
         
+        .term-explanation {{
+            margin: 12px 0;
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #8BC34A;
+        }}
+        
+        .technical-term {{
+            font-weight: 600;
+            color: #1a2332;
+            margin-bottom: 6px;
+        }}
+        
+        .mario-says {{
+            background: linear-gradient(135deg, #FFEB3B 0%, #FFC107 100%);
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 3px solid #E52521;
+            margin-top: 8px;
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+            font-size: 14px;
+            line-height: 1.6;
+        }}
+        
         .trigger-section {{
-            background: #f8f9fa;
+            background: white;
             padding: 16px;
             margin: 12px 0;
-            border-left: 3px solid #2c3e50;
+            border-left: 4px solid #8BC34A;
+            border-radius: 8px;
         }}
         
         .trigger-title {{
             font-weight: 700;
             color: #1a2332;
             margin-bottom: 8px;
-            font-size: 15px;
+            font-size: 16px;
         }}
         
         .trigger-list {{
@@ -1004,7 +1049,7 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
 <body>
     <div class="container">
         <div class="header">
-            <h1>黄金盘前计划</h1>
+            <h1>🍄 马里奥的黄金闯关指南 🌟</h1>
             <div class="date">{timestamp.strftime('%Y年%m月%d日')}</div>
         </div>
         
@@ -1016,7 +1061,12 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
                     今日核心判断
                 </div>
                 <div class="module-content">
-                    {core_judgment}
+                    💬 马里奥的判断：{core_judgment}
+                    
+                    {add_mario_explanation(
+                        f"最新价格：${analysis['latest_close']:.2f}",
+                        f"就是现在金子值多少钱一盎司，约合人民币{analysis['latest_close']*7:.0f}元"
+                    )}
                 </div>
             </div>
             
@@ -1028,6 +1078,31 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
                 </div>
                 <div class="module-content">
                     {framework_validity}
+                    
+                    {add_mario_explanation(
+                        f"MA5（5日均线）: ${analysis['ma5']:.2f}",
+                        "就像最近5天的平均成绩，看看黄金最近表现如何"
+                    )}
+                    
+                    {add_mario_explanation(
+                        f"MA10（10日均线）: ${analysis['ma10']:.2f}",
+                        "最近10天的平均分数，帮我们看清大方向"
+                    )}
+                    
+                    {add_mario_explanation(
+                        f"MA20（20日均线）: ${analysis['ma20']:.2f}",
+                        "最近20天的趋势，像一个月的总体评价"
+                    )}
+                    
+                    {add_mario_explanation(
+                        f"RSI指标: {analysis.get('rsi', 50):.1f}",
+                        "这个数字告诉你金子是太抢手（>70超买）还是没人要（<30超卖），现在{analysis.get('rsi', 50):.1f}{'偏冷' if analysis.get('rsi', 50) < 40 else '偏热' if analysis.get('rsi', 50) > 60 else '正常'}"
+                    )}
+                    
+                    {add_mario_explanation(
+                        f"均线排列：{analysis['ma_alignment']}",
+                        "{'像上楼梯，越走越高，看涨！' if analysis['ma_alignment'] == '多头排列' else '像下楼梯，越走越低，要小心' if analysis['ma_alignment'] == '空头排列' else '上上下下，方向不明'}"
+                    )}
                 </div>
             </div>
             
@@ -1039,24 +1114,33 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
                 </div>
                 <div class="module-content">
                     <div class="trigger-section">
-                        <div class="trigger-title">顺趋势情景</div>
+                        <div class="trigger-title">🌟 顺趋势情景</div>
                         <ul class="trigger-list">
                             {''.join([f'<li>{cond}</li>' for cond in conditions['trend_following']])}
                         </ul>
+                        <div class="mario-says">
+                            🎮 马里奥说：这些情况出现了，就像找到了正确的路，可以继续前进！
+                        </div>
                     </div>
                     
                     <div class="trigger-section">
-                        <div class="trigger-title">观望情景</div>
+                        <div class="trigger-title">🌟 观望情景</div>
                         <ul class="trigger-list">
                             {''.join([f'<li>{cond}</li>' for cond in conditions['wait_and_see']])}
                         </ul>
+                        <div class="mario-says">
+                            🍄 马里奥说：这时候像在两个平台之间晃悠，先别急着跳，等等看！
+                        </div>
                     </div>
                     
                     <div class="trigger-section">
-                        <div class="trigger-title">结构失效情景</div>
+                        <div class="trigger-title">🌟 结构失效情景</div>
                         <ul class="trigger-list">
                             {''.join([f'<li>{cond}</li>' for cond in conditions['structure_failure']])}
                         </ul>
+                        <div class="mario-says">
+                            🔥 马里奥说：如果突破了"安全线"，那计划就失效了，要立刻调整策略，就像撞到刺猬要重新开始！
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1069,17 +1153,27 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
                 </div>
                 <div class="module-content">
                     <div style="margin-bottom: 20px;">
-                        <strong style="color: #1a2332;">主要风险：</strong>
+                        <strong style="color: #1a2332;">🔥 主要风险：</strong>
                         <ul class="risk-list">
                             {''.join([f'<li>{risk}</li>' for risk in risks['risks']])}
                         </ul>
                     </div>
-                    <div>
-                        <strong style="color: #1a2332;">判断失效点：</strong>
+                    <div style="margin-bottom: 16px;">
+                        <strong style="color: #1a2332;">🧱 判断失效点：</strong>
                         <ul class="risk-list">
                             {''.join([f'<li>{point}</li>' for point in risks['invalidation_points']])}
                         </ul>
                     </div>
+                    
+                    {add_mario_explanation(
+                        "风险控制",
+                        "投资就像闯关，一定要设好'重启点'（止损位），掉坑里了就立刻重来，保护好你的金币（本金）！"
+                    )}
+                    
+                    {add_mario_explanation(
+                        "失效点",
+                        "就像通关时的生命线，一旦跌破这个位置，说明我们判断错了，要赶紧调整，不能硬撑！"
+                    )}
                 </div>
             </div>
             
@@ -1091,11 +1185,21 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
                 </div>
                 <div class="module-content">
                     <div class="confidence-bar">
-                        <div class="confidence-fill" style="width: {confidence}%;">
-                            置信度 {confidence}%
+                        <div class="confidence-fill" style="width: {confidence}%; background: linear-gradient(90deg, #E52521 0%, #F39C12 100%);">
+                            🏆 置信度 {confidence}%
                         </div>
                     </div>
                     <p style="margin-top: 12px;">{participation}</p>
+                    
+                    {add_mario_explanation(
+                        f"置信度 {confidence}%",
+                        f"我们有{confidence}%的信心，就像通关的把握！{('信心很足，可以多投入点金币' if confidence >= 70 else '信心一般，稳着点' if confidence >= 50 else '信心不足，先观望')}"
+                    )}
+                    
+                    {add_mario_explanation(
+                        "仓位建议",
+                        f"建议用{'60-80%' if confidence >= 70 else '40-60%' if confidence >= 50 else '20-40%'}的金币参与，记住永远留点保命的！输了可以再赚，本金没了就game over了"
+                    )}
                 </div>
             </div>
             
@@ -1106,8 +1210,12 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
                     一句话盘前纪律
                 </div>
                 <div class="module-content">
-                    <div class="discipline-box">
-                        {discipline}
+                    <div class="discipline-box" style="background: #FFEB3B; padding: 16px; border-radius: 8px; border: 3px solid #E52521; font-size: 16px; font-weight: 600; text-align: center;">
+                        ⚡ {discipline}
+                    </div>
+                    
+                    <div class="mario-says" style="margin-top: 16px;">
+                        💬 马里奥说：游戏里要保护生命值，投资也要保护本金！不要贪心，安全第一！记住：金币可以再赚，但本金没了就真的game over了！🍄
                     </div>
                 </div>
             </div>
@@ -1144,8 +1252,8 @@ def main():
     Main function
     """
     print("=" * 60)
-    print("点点的金价分析")
-    print("Diandian's Gold Price Analysis")
+    print("🍄 马里奥的黄金闯关指南 🌟")
+    print("Mario's Gold Adventure Guide")
     print(f"当前时间: {datetime.now().strftime('%Y年%m月%d日 %H:%M:%S')}")
     print("=" * 60)
     print()
