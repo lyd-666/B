@@ -1,0 +1,779 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+黄金盘前计划生成器
+Gold Pre-Market Planning Generator
+"""
+
+import yfinance as yf
+import pandas as pd
+import numpy as np
+from datetime import datetime, timedelta
+
+
+def fetch_gold_data(ticker="GC=F", days=30):
+    """
+    获取黄金价格数据
+    Fetch gold price data from yfinance
+    """
+    try:
+        gold = yf.Ticker(ticker)
+        end_date = datetime.now()
+        start_date = end_date - timedelta(days=days)
+        df = gold.history(start=start_date, end=end_date)
+        
+        if df.empty:
+            # 尝试备选代码
+            print(f"尝试备选代码 XAUUSD=X...")
+            gold = yf.Ticker("XAUUSD=X")
+            df = gold.history(start=start_date, end=end_date)
+        
+        return df
+    except Exception as e:
+        print(f"获取数据失败: {e}")
+        print("切换到演示模式，使用模拟数据...")
+        return generate_sample_data(days)
+
+
+def generate_sample_data(days=30):
+    """
+    生成示例数据用于演示
+    Generate sample data for demonstration
+    """
+    dates = pd.date_range(end=datetime.now(), periods=days, freq='D')
+    
+    # 模拟价格数据，基于合理的黄金价格区间
+    base_price = 2650.0
+    np.random.seed(42)
+    
+    # 生成带趋势的随机价格
+    trend = np.linspace(0, 30, days)  # 轻微上升趋势
+    noise = np.random.normal(0, 15, days)  # 随机波动
+    close_prices = base_price + trend + noise
+    
+    # 生成其他OHLC数据
+    data = {
+        'Open': close_prices + np.random.uniform(-5, 5, days),
+        'High': close_prices + np.random.uniform(5, 15, days),
+        'Low': close_prices - np.random.uniform(5, 15, days),
+        'Close': close_prices,
+        'Volume': np.random.randint(50000, 200000, days)
+    }
+    
+    df = pd.DataFrame(data, index=dates)
+    return df
+
+
+def calculate_technical_indicators(df):
+    """
+    计算技术指标
+    Calculate technical indicators
+    """
+    if df is None or df.empty:
+        return None
+    
+    # 计算移动平均线
+    df['MA5'] = df['Close'].rolling(window=5).mean()
+    df['MA10'] = df['Close'].rolling(window=10).mean()
+    df['MA20'] = df['Close'].rolling(window=20).mean()
+    
+    # 计算动能指标
+    df['Momentum'] = df['Close'].diff(5)
+    
+    # 计算波动率
+    df['Volatility'] = df['Close'].rolling(window=5).std()
+    
+    # 计算日内波动
+    df['Daily_Range'] = df['High'] - df['Low']
+    df['ATR'] = df['Daily_Range'].rolling(window=5).mean()
+    
+    return df
+
+
+def analyze_trend(df):
+    """
+    分析趋势和框架
+    Analyze trend and framework
+    """
+    if df is None or df.empty or len(df) < 2:
+        return {
+            'trend': '数据不足',
+            'confidence': 0,
+            'analysis': {}
+        }
+    
+    latest = df.iloc[-1]
+    previous = df.iloc[-2]
+    
+    # 近5日数据
+    recent_5 = df.tail(5)
+    
+    # 趋势判断
+    trend_direction = "上升" if latest['Close'] > latest['MA5'] else "下降"
+    if abs(latest['Close'] - latest['MA5']) < latest['ATR'] * 0.3:
+        trend_direction = "震荡"
+    
+    # 均线排列
+    ma_alignment = ""
+    if pd.notna(latest['MA5']) and pd.notna(latest['MA10']) and pd.notna(latest['MA20']):
+        if latest['MA5'] > latest['MA10'] > latest['MA20']:
+            ma_alignment = "多头排列"
+        elif latest['MA5'] < latest['MA10'] < latest['MA20']:
+            ma_alignment = "空头排列"
+        else:
+            ma_alignment = "混乱排列"
+    
+    # 动能分析
+    momentum_strength = "强" if abs(latest['Momentum']) > latest['ATR'] else "弱"
+    momentum_direction = "正" if latest['Momentum'] > 0 else "负"
+    
+    # 波动分析
+    volatility_level = "高" if latest['Volatility'] > recent_5['Volatility'].mean() * 1.2 else "正常"
+    
+    # 价格位置
+    price_position = ""
+    if latest['Close'] > recent_5['High'].max() * 0.98:
+        price_position = "接近区间高点"
+    elif latest['Close'] < recent_5['Low'].min() * 1.02:
+        price_position = "接近区间低点"
+    else:
+        price_position = "区间中部"
+    
+    # 置信度计算 (0-100)
+    confidence = 50
+    if ma_alignment in ["多头排列", "空头排列"]:
+        confidence += 20
+    if momentum_strength == "强":
+        confidence += 15
+    if volatility_level == "正常":
+        confidence += 10
+    else:
+        confidence -= 5
+    if trend_direction != "震荡":
+        confidence += 5
+    
+    confidence = max(0, min(100, confidence))
+    
+    analysis = {
+        'trend_direction': trend_direction,
+        'ma_alignment': ma_alignment,
+        'momentum_direction': momentum_direction,
+        'momentum_strength': momentum_strength,
+        'volatility_level': volatility_level,
+        'price_position': price_position,
+        'latest_close': latest['Close'],
+        'previous_close': previous['Close'],
+        'change_pct': ((latest['Close'] - previous['Close']) / previous['Close']) * 100,
+        'ma5': latest['MA5'],
+        'ma10': latest['MA10'],
+        'ma20': latest['MA20'],
+        'atr': latest['ATR']
+    }
+    
+    return {
+        'trend': trend_direction,
+        'confidence': confidence,
+        'analysis': analysis
+    }
+
+
+def generate_core_judgment(trend_data):
+    """
+    生成核心判断（一句话）
+    Generate core judgment in one sentence
+    """
+    analysis = trend_data['analysis']
+    trend = trend_data['trend']
+    
+    if trend == "上升":
+        if analysis['ma_alignment'] == "多头排列":
+            return f"黄金维持多头格局，收于{analysis['latest_close']:.2f}，短期均线支撑有效。"
+        else:
+            return f"黄金短期反弹至{analysis['latest_close']:.2f}，但结构尚未转强。"
+    elif trend == "下降":
+        if analysis['ma_alignment'] == "空头排列":
+            return f"黄金空头格局延续，收于{analysis['latest_close']:.2f}，均线压制明显。"
+        else:
+            return f"黄金回调至{analysis['latest_close']:.2f}，需观察支撑是否有效。"
+    else:
+        return f"黄金于{analysis['latest_close']:.2f}附近震荡，方向尚不明确。"
+
+
+def generate_trend_framework(trend_data):
+    """
+    判断趋势框架是否有效
+    Check if trend framework is still valid
+    """
+    analysis = trend_data['analysis']
+    
+    if analysis['ma_alignment'] == "多头排列":
+        if analysis['trend_direction'] == "上升" and analysis['momentum_direction'] == "正":
+            return "有效 - 多头排列配合正动能，趋势延续性强。"
+        else:
+            return "弱化 - 虽保持多头排列，但动能或价格表现转弱。"
+    elif analysis['ma_alignment'] == "空头排列":
+        if analysis['trend_direction'] == "下降" and analysis['momentum_direction'] == "负":
+            return "有效 - 空头排列配合负动能，下行压力延续。"
+        else:
+            return "弱化 - 虽保持空头排列，但出现反弹迹象。"
+    else:
+        return "无明确框架 - 均线混乱，处于方向选择阶段。"
+
+
+def generate_trigger_conditions(trend_data):
+    """
+    生成关键触发条件（三情景）
+    Generate key trigger conditions for three scenarios
+    """
+    analysis = trend_data['analysis']
+    ma5 = analysis['ma5']
+    ma10 = analysis['ma10']
+    atr = analysis['atr']
+    latest_close = analysis['latest_close']
+    
+    conditions = {
+        'trend_following': [],
+        'wait_and_see': [],
+        'structure_failure': []
+    }
+    
+    if analysis['trend_direction'] == "上升":
+        # 顺趋势
+        conditions['trend_following'].append(f"价格守住MA5（{ma5:.2f}）上方且创新高")
+        conditions['trend_following'].append(f"成交量配合放大，动能保持正向")
+        
+        # 观望
+        conditions['wait_and_see'].append(f"价格在MA5与MA10（{ma10:.2f}）之间震荡")
+        conditions['wait_and_see'].append("波动收窄，等待方向选择")
+        
+        # 结构失效
+        conditions['structure_failure'].append(f"有效跌破MA10（{ma10:.2f}），对应约{ma10-atr:.2f}")
+        conditions['structure_failure'].append("连续两日收盘低于短期均线")
+        
+    elif analysis['trend_direction'] == "下降":
+        # 顺趋势
+        conditions['trend_following'].append(f"价格压制于MA5（{ma5:.2f}）下方且创新低")
+        conditions['trend_following'].append("反弹无力，动能保持负向")
+        
+        # 观望
+        conditions['wait_and_see'].append(f"价格在MA5与MA10（{ma10:.2f}）之间整理")
+        conditions['wait_and_see'].append("下跌动能衰竭但尚未突破")
+        
+        # 结构失效
+        conditions['structure_failure'].append(f"有效突破MA10（{ma10:.2f}），对应约{ma10+atr:.2f}")
+        conditions['structure_failure'].append("连续两日收盘高于短期均线")
+        
+    else:  # 震荡
+        # 顺趋势（此时为区间操作）
+        conditions['trend_following'].append(f"区间高点{analysis['price_position']}附近做空")
+        conditions['trend_following'].append(f"区间低点附近做多")
+        
+        # 观望
+        conditions['wait_and_see'].append("价格位于区间中部，无明确方向")
+        conditions['wait_and_see'].append("等待放量突破或跌破")
+        
+        # 结构失效
+        conditions['structure_failure'].append(f"放量突破近期震荡区间")
+        conditions['structure_failure'].append("均线开始发散，形成新趋势")
+    
+    return conditions
+
+
+def generate_risks(trend_data):
+    """
+    生成主要风险与判断失效点
+    Generate main risks and invalidation points
+    """
+    analysis = trend_data['analysis']
+    
+    risks = []
+    invalidation_points = []
+    
+    # 波动风险
+    if analysis['volatility_level'] == "高":
+        risks.append("波动率处于高位，止损空间需相应扩大")
+    
+    # 均线排列风险
+    if analysis['ma_alignment'] == "混乱排列":
+        risks.append("均线混乱，假突破风险增加")
+    
+    # 动能风险
+    if analysis['momentum_strength'] == "弱":
+        risks.append("动能偏弱，趋势延续性存疑")
+    
+    # 外部因素
+    risks.append("需关注美元指数、美债收益率等宏观因子")
+    risks.append("地缘政治事件可能引发剧烈波动")
+    
+    # 失效点
+    ma10 = analysis['ma10']
+    if analysis['trend_direction'] == "上升":
+        invalidation_points.append(f"多头判断失效点：有效跌破MA10（{ma10:.2f}）")
+    elif analysis['trend_direction'] == "下降":
+        invalidation_points.append(f"空头判断失效点：有效突破MA10（{ma10:.2f}）")
+    else:
+        invalidation_points.append(f"震荡判断失效点：突破区间边界并持续运行")
+    
+    return {
+        'risks': risks,
+        'invalidation_points': invalidation_points
+    }
+
+
+def generate_participation_intensity(confidence):
+    """
+    根据置信度生成参与强度建议
+    Generate participation intensity based on confidence score
+    """
+    if confidence >= 80:
+        return "积极参与 - 框架清晰，信号明确，可适度放大仓位"
+    elif confidence >= 60:
+        return "正常参与 - 趋势成立，按常规仓位操作"
+    elif confidence >= 40:
+        return "谨慎参与 - 信号有效性一般，降低仓位规模"
+    else:
+        return "观望为主 - 结构混乱或信号矛盾，等待更明确机会"
+
+
+def generate_discipline():
+    """
+    生成一句话盘前纪律
+    Generate one-sentence pre-market discipline
+    """
+    disciplines = [
+        "计划你的交易，交易你的计划。",
+        "严格止损，保护本金。",
+        "顺势而为，不逆市场而动。",
+        "耐心等待信号，不追涨杀跌。",
+        "控制仓位，风险第一。"
+    ]
+    # 简单轮换或随机选择
+    from datetime import datetime
+    idx = datetime.now().day % len(disciplines)
+    return disciplines[idx]
+
+
+def generate_html_report(trend_data, conditions, risks, timestamp):
+    """
+    生成HTML盘前简报
+    Generate HTML pre-market report
+    """
+    analysis = trend_data['analysis']
+    confidence = trend_data['confidence']
+    
+    # 生成各模块内容
+    core_judgment = generate_core_judgment(trend_data)
+    framework_validity = generate_trend_framework(trend_data)
+    participation = generate_participation_intensity(confidence)
+    discipline = generate_discipline()
+    
+    html_content = f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黄金盘前计划 - {timestamp.strftime('%Y年%m月%d日')}</title>
+    <style>
+        * {{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }}
+        
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }}
+        
+        .container {{
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }}
+        
+        .header {{
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }}
+        
+        .header h1 {{
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }}
+        
+        .header .date {{
+            font-size: 14px;
+            opacity: 0.9;
+        }}
+        
+        .content {{
+            padding: 30px;
+        }}
+        
+        .section {{
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }}
+        
+        .section-title {{
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }}
+        
+        .section-title::before {{
+            content: "▶";
+            color: #667eea;
+            margin-right: 8px;
+            font-size: 14px;
+        }}
+        
+        .section-content {{
+            color: #4a5568;
+            font-size: 15px;
+        }}
+        
+        .highlight {{
+            background: #fff5e1;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 3px solid #ffa500;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }}
+        
+        .scenario {{
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }}
+        
+        .scenario-title {{
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }}
+        
+        .scenario.bullish {{
+            border-left: 4px solid #48bb78;
+        }}
+        
+        .scenario.neutral {{
+            border-left: 4px solid #ed8936;
+        }}
+        
+        .scenario.bearish {{
+            border-left: 4px solid #f56565;
+        }}
+        
+        .condition-list {{
+            list-style: none;
+            padding-left: 0;
+        }}
+        
+        .condition-list li {{
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }}
+        
+        .condition-list li::before {{
+            content: "•";
+            position: absolute;
+            left: 5px;
+            color: #667eea;
+            font-weight: bold;
+        }}
+        
+        .risk-list {{
+            list-style: none;
+            padding-left: 0;
+        }}
+        
+        .risk-list li {{
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }}
+        
+        .risk-list li::before {{
+            content: "⚠";
+            position: absolute;
+            left: 0;
+            color: #f56565;
+        }}
+        
+        .confidence-bar {{
+            width: 100%;
+            height: 30px;
+            background: #e2e8f0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 10px 0;
+        }}
+        
+        .confidence-fill {{
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            transition: width 1s ease;
+        }}
+        
+        .data-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }}
+        
+        .data-item {{
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }}
+        
+        .data-label {{
+            font-size: 13px;
+            color: #718096;
+            margin-bottom: 5px;
+        }}
+        
+        .data-value {{
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+        }}
+        
+        .discipline {{
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 500;
+            margin-top: 30px;
+        }}
+        
+        .footer {{
+            text-align: center;
+            padding: 20px;
+            color: #718096;
+            font-size: 13px;
+            border-top: 1px solid #e2e8f0;
+        }}
+        
+        .change-positive {{
+            color: #48bb78;
+        }}
+        
+        .change-negative {{
+            color: #f56565;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>黄金（GC=F）盘前计划</h1>
+            <div class="date">{timestamp.strftime('%Y年%m月%d日')} 生成</div>
+        </div>
+        
+        <div class="content">
+            <!-- 核心判断 -->
+            <div class="highlight">
+                📊 今日核心判断：{core_judgment}
+            </div>
+            
+            <!-- 趋势框架 -->
+            <div class="section">
+                <div class="section-title">趋势框架有效性</div>
+                <div class="section-content">
+                    {framework_validity}
+                    
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <div class="data-label">最新收盘</div>
+                            <div class="data-value">${analysis['latest_close']:.2f}</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">日内涨跌</div>
+                            <div class="data-value {'change-positive' if analysis['change_pct'] > 0 else 'change-negative'}">
+                                {analysis['change_pct']:+.2f}%
+                            </div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">均线排列</div>
+                            <div class="data-value" style="font-size: 14px;">{analysis['ma_alignment']}</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">波动状态</div>
+                            <div class="data-value" style="font-size: 14px;">{analysis['volatility_level']}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 盘中关键触发条件 -->
+            <div class="section">
+                <div class="section-title">盘中关键触发条件</div>
+                <div class="section-content">
+                    <div class="scenario bullish">
+                        <div class="scenario-title">✓ 顺趋势情景</div>
+                        <ul class="condition-list">
+                            {''.join([f'<li>{cond}</li>' for cond in conditions['trend_following']])}
+                        </ul>
+                    </div>
+                    
+                    <div class="scenario neutral">
+                        <div class="scenario-title">◐ 观望情景</div>
+                        <ul class="condition-list">
+                            {''.join([f'<li>{cond}</li>' for cond in conditions['wait_and_see']])}
+                        </ul>
+                    </div>
+                    
+                    <div class="scenario bearish">
+                        <div class="scenario-title">✗ 结构失效情景</div>
+                        <ul class="condition-list">
+                            {''.join([f'<li>{cond}</li>' for cond in conditions['structure_failure']])}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 风险与失效点 -->
+            <div class="section">
+                <div class="section-title">主要风险与判断失效点</div>
+                <div class="section-content">
+                    <div style="margin-bottom: 15px;">
+                        <strong>主要风险：</strong>
+                        <ul class="risk-list">
+                            {''.join([f'<li>{risk}</li>' for risk in risks['risks']])}
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>判断失效点：</strong>
+                        <ul class="risk-list">
+                            {''.join([f'<li>{point}</li>' for point in risks['invalidation_points']])}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 参与强度 -->
+            <div class="section">
+                <div class="section-title">今日参与强度</div>
+                <div class="section-content">
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: {confidence}%;">
+                            置信度 {confidence}%
+                        </div>
+                    </div>
+                    <p style="margin-top: 10px;">{participation}</p>
+                </div>
+            </div>
+            
+            <!-- 盘前纪律 -->
+            <div class="discipline">
+                💡 盘前纪律：{discipline}
+            </div>
+        </div>
+        
+        <div class="footer">
+            数据来源：yfinance (GC=F) | 仅供参考，不构成投资建议
+        </div>
+    </div>
+</body>
+</html>
+"""
+    
+    return html_content
+
+
+def main():
+    """
+    主函数
+    Main function
+    """
+    print("=" * 60)
+    print("黄金盘前计划生成器")
+    print("Gold Pre-Market Planning Generator")
+    print("=" * 60)
+    print()
+    
+    # 获取数据
+    print("正在获取黄金价格数据...")
+    df = fetch_gold_data()
+    
+    if df is None or df.empty:
+        print("错误：无法获取数据")
+        return
+    
+    print(f"成功获取 {len(df)} 条数据记录")
+    
+    # 计算技术指标
+    print("正在计算技术指标...")
+    df = calculate_technical_indicators(df)
+    
+    # 分析趋势
+    print("正在分析趋势...")
+    trend_data = analyze_trend(df)
+    
+    # 生成触发条件
+    print("正在生成触发条件...")
+    conditions = generate_trigger_conditions(trend_data)
+    
+    # 生成风险分析
+    print("正在生成风险分析...")
+    risks = generate_risks(trend_data)
+    
+    # 生成HTML报告
+    print("正在生成HTML报告...")
+    timestamp = datetime.now()
+    html_content = generate_html_report(trend_data, conditions, risks, timestamp)
+    
+    # 保存文件
+    output_file = f"gold_premarket_plan_{timestamp.strftime('%Y%m%d')}.html"
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+    
+    print()
+    print("=" * 60)
+    print(f"✓ 报告生成成功！")
+    print(f"文件位置：{output_file}")
+    print("=" * 60)
+    print()
+    print("核心数据摘要：")
+    print(f"  最新价格：${trend_data['analysis']['latest_close']:.2f}")
+    print(f"  趋势方向：{trend_data['trend']}")
+    print(f"  置信度：{trend_data['confidence']}%")
+    print(f"  均线排列：{trend_data['analysis']['ma_alignment']}")
+    print()
+
+
+if __name__ == "__main__":
+    main()
