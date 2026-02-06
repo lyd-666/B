@@ -790,6 +790,7 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
     """
     analysis = trend_data['analysis']
     confidence = trend_data['confidence']
+    trend = trend_data['trend']
     
     # 生成各模块内容
     core_judgment = generate_core_judgment(trend_data)
@@ -1220,6 +1221,220 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
                 </div>
             </div>
         </div>
+        
+        <!-- 🎮 马里奥的互动顾问 -->
+        <div class="mario-advisor" style="background: linear-gradient(135deg, #FFDE59 0%, #FFC107 100%); border: 5px solid #D2691E; border-radius: 20px; padding: 30px; margin: 30px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <h2 style="color: #E52521; font-size: 28px; margin-bottom: 20px; text-align: center;">
+                🎮 马里奥帮你分析持仓 🌟
+            </h2>
+            <p style="text-align: center; color: #666; margin-bottom: 20px;">
+                输入你的买入价格，马里奥会根据技术指标给你专业建议！
+            </p>
+            
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+                <div style="width: 100%; max-width: 400px;">
+                    <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">
+                        💰 您的买入价格（元/克）：
+                    </label>
+                    <input 
+                        type="number" 
+                        id="userPrice" 
+                        placeholder="例如: 1050"
+                        style="width: 100%; padding: 12px; font-size: 18px; border: 3px solid #8BC34A; border-radius: 10px; background: white; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);"
+                    >
+                </div>
+                
+                <button 
+                    onclick="analyzeMarioAdvice()" 
+                    style="background: linear-gradient(135deg, #E52521 0%, #C62828 100%); color: white; font-size: 20px; font-weight: 600; padding: 15px 40px; border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: transform 0.2s;"
+                    onmouseover="this.style.transform='scale(1.05)'"
+                    onmouseout="this.style.transform='scale(1)'"
+                >
+                    🍄 马里奥帮我分析 🍄
+                </button>
+            </div>
+            
+            <div id="adviceResult" style="margin-top: 30px;"></div>
+        </div>
+        
+        <script>
+        // 从页面数据中提取技术指标
+        const CURRENT_PRICE_PER_GRAM = {analysis['latest_close']*7/31.1035:.2f};
+        const RSI_VALUE = {analysis.get('rsi', 50):.1f};
+        const TREND_DIRECTION = "{trend}";
+        const MA_ALIGNMENT = "{analysis['ma_alignment']}";
+        const CONFIDENCE_SCORE = {confidence};
+        
+        function analyzeMarioAdvice() {{
+            const userPriceInput = document.getElementById('userPrice');
+            const userPrice = parseFloat(userPriceInput.value);
+            
+            // 验证输入
+            if (!userPrice || userPrice <= 0) {{
+                document.getElementById('adviceResult').innerHTML = `
+                    <div style="background: #FFEB3B; padding: 20px; border-radius: 12px; border: 3px solid #E52521; text-align: center;">
+                        <p style="font-size: 18px; color: #E52521; font-weight: 600;">
+                            🍄 马里奥说：请输入有效的价格哦！
+                        </p>
+                        <p style="color: #666; margin-top: 10px;">
+                            价格要大于0才能帮你分析呢！
+                        </p>
+                    </div>
+                `;
+                return;
+            }}
+            
+            // 计算盈亏
+            const profitAmount = CURRENT_PRICE_PER_GRAM - userPrice;
+            const profitRatio = (profitAmount / userPrice) * 100;
+            
+            // 决策逻辑
+            let adviceType = "";
+            let adviceIcon = "";
+            let adviceColor = "";
+            let adviceText = "";
+            let marioExplanation = "";
+            
+            if (profitRatio > 15 && RSI_VALUE > 70) {{
+                adviceType = "建议部分止盈";
+                adviceIcon = "🔴";
+                adviceColor = "#FF5252";
+                adviceText = "你赚得不少了，而且RSI超买，可以考虑先落袋为安！";
+                marioExplanation = `太棒了！你赚了<strong>${{profitAmount.toFixed(0)}}元/克（+${{profitRatio.toFixed(1)}}%）</strong>，就像拿到了星星！<br><br>
+                    但要注意：RSI已经${{RSI_VALUE.toFixed(1)}}（超买>70），市场可能过热了。<br><br>
+                    <strong>🎯 马里奥的建议：</strong><br>
+                    • 可以先卖出30-50%锁定利润<br>
+                    • 剩下的继续持有，设置保本止损在${{(userPrice*1.05).toFixed(0)}}元<br>
+                    • 如果跌破${{(CURRENT_PRICE_PER_GRAM*0.95).toFixed(0)}}元就要考虑全部出场`;
+            }} else if (profitRatio > 5 && TREND_DIRECTION === "上升") {{
+                adviceType = "建议继续持有";
+                adviceIcon = "🟢";
+                adviceColor = "#8BC34A";
+                adviceText = "恭喜盈利中！市场趋势向上，可以继续持有！";
+                marioExplanation = `恭喜！你现在赚了<strong>${{profitAmount.toFixed(0)}}元/克（+${{profitRatio.toFixed(1)}}%）</strong><br><br>
+                    市场处于${{TREND_DIRECTION}}趋势，就像马里奥在往上跳台阶！<br>
+                    RSI是${{RSI_VALUE.toFixed(1)}}，还没过热（<70），说明还有上涨空间。<br><br>
+                    <strong>🎯 马里奥的建议：</strong><br>
+                    • 继续持有，耐心等待更高点位<br>
+                    • 设置止损在${{(userPrice*1.02).toFixed(0)}}元，保护利润<br>
+                    • 如果涨到${{(CURRENT_PRICE_PER_GRAM*1.05).toFixed(0)}}元可以考虑部分止盈`;
+            }} else if (profitRatio > -3 && profitRatio <= 5) {{
+                adviceType = "建议观望等待";
+                adviceIcon = "🟡";
+                adviceColor = "#FFC107";
+                adviceText = "盈亏不大，市场方向不明，先观望比较好！";
+                marioExplanation = `现在${{profitRatio >= 0 ? '赚了' : '亏了'}}<strong>${{Math.abs(profitAmount).toFixed(0)}}元/克（${{profitRatio >= 0 ? '+' : ''}}${{profitRatio.toFixed(1)}}%）</strong><br><br>
+                    市场现在${{TREND_DIRECTION}}，方向不够明确，就像马里奥在平地上走。<br>
+                    RSI是${{RSI_VALUE.toFixed(1)}}（中性区域），没有明确的买卖信号。<br><br>
+                    <strong>🎯 马里奥的建议：</strong><br>
+                    • 先别急着行动，等市场方向明朗<br>
+                    • 如果涨回${{(userPrice*1.03).toFixed(0)}}元以上可以考虑解套<br>
+                    • 如果跌破${{(userPrice*0.95).toFixed(0)}}元要小心，考虑止损`;
+            }} else if (profitRatio <= -3 && profitRatio > -8 && TREND_DIRECTION === "上升") {{
+                adviceType = "可考虑补仓降低成本";
+                adviceIcon = "🟢";
+                adviceColor = "#8BC34A";
+                adviceText = "虽然暂时亏损，但趋势向上，可以考虑补仓！";
+                marioExplanation = `现在亏了<strong>${{Math.abs(profitAmount).toFixed(0)}}元/克（${{profitRatio.toFixed(1)}}%）</strong>，但别太担心！<br><br>
+                    市场处于上升趋势，就像马里奥准备跳起来了。<br>
+                    亏损还在可控范围内（<8%），这可能是个补仓的机会。<br><br>
+                    <strong>🎯 马里奥的建议：</strong><br>
+                    • 如果有资金，可以小量补仓，降低平均成本<br>
+                    • 补仓后平均成本约${{((userPrice + CURRENT_PRICE_PER_GRAM)/2).toFixed(0)}}元<br>
+                    • 设置总仓位止损在${{(CURRENT_PRICE_PER_GRAM*0.92).toFixed(0)}}元`;
+            }} else if (profitRatio <= -8) {{
+                adviceType = "建议考虑止损";
+                adviceIcon = "🔴";
+                adviceColor = "#FF5252";
+                adviceText = "亏损较大，要认真考虑止损保护剩余资金！";
+                marioExplanation = `现在亏了<strong>${{Math.abs(profitAmount).toFixed(0)}}元/克（${{profitRatio.toFixed(1)}}%）</strong>，这确实不是好消息。<br><br>
+                    亏损已经超过8%，市场趋势是${{TREND_DIRECTION}}，风险在加大。<br>
+                    就像马里奥掉进坑里，要及时按重启按钮！<br><br>
+                    <strong>🎯 马里奥的建议：</strong><br>
+                    • 认真考虑止损，保护剩余的${{((1+profitRatio/100)*100).toFixed(1)}}%资金<br>
+                    • 如果反弹到${{(userPrice*0.95).toFixed(0)}}元可以减仓<br>
+                    • 不要抱着"回本再卖"的想法，避免更大亏损<br>
+                    • 止损后可以等待更好的买入机会`;
+            }} else {{
+                adviceType = "建议观望";
+                adviceIcon = "🟡";
+                adviceColor = "#FFC107";
+                adviceText = "当前情况不明朗，观望是最好的选择！";
+                marioExplanation = `现在${{profitRatio >= 0 ? '赚了' : '亏了'}}<strong>${{Math.abs(profitAmount).toFixed(0)}}元/克（${{profitRatio >= 0 ? '+' : ''}}${{profitRatio.toFixed(1)}}%）</strong><br><br>
+                    市场情况比较复杂，没有明确的信号。<br>
+                    就像马里奥在迷宫里，需要耐心观察。<br><br>
+                    <strong>🎯 马里奥的建议：</strong><br>
+                    • 保持观望，等待更明确的信号<br>
+                    • 关注市场变化，随时准备行动<br>
+                    • 设置止损保护在${{(userPrice*0.92).toFixed(0)}}元`;
+            }}
+            
+            // 显示结果
+            document.getElementById('adviceResult').innerHTML = `
+                <div style="background: white; border: 5px solid ${{adviceColor}}; border-radius: 16px; padding: 25px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <h3 style="color: ${{adviceColor}}; font-size: 24px; margin-bottom: 10px;">
+                            ${{adviceIcon}} ${{adviceType}}
+                        </h3>
+                        <p style="color: #666; font-size: 16px;">
+                            ${{adviceText}}
+                        </p>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <div style="color: #868e96; font-size: 14px;">您的买入价</div>
+                                <div style="color: #333; font-size: 20px; font-weight: 600;">${{userPrice.toFixed(0)}} 元/克</div>
+                            </div>
+                            <div>
+                                <div style="color: #868e96; font-size: 14px;">当前价格</div>
+                                <div style="color: #333; font-size: 20px; font-weight: 600;">${{CURRENT_PRICE_PER_GRAM.toFixed(0)}} 元/克</div>
+                            </div>
+                            <div>
+                                <div style="color: #868e96; font-size: 14px;">盈亏金额</div>
+                                <div style="color: ${{profitAmount >= 0 ? '#8BC34A' : '#FF5252'}}; font-size: 20px; font-weight: 600;">
+                                    ${{profitAmount >= 0 ? '+' : ''}}${{profitAmount.toFixed(0)}} 元/克
+                                </div>
+                            </div>
+                            <div>
+                                <div style="color: #868e96; font-size: 14px;">盈亏比例</div>
+                                <div style="color: ${{profitAmount >= 0 ? '#8BC34A' : '#FF5252'}}; font-size: 20px; font-weight: 600;">
+                                    ${{profitRatio >= 0 ? '+' : ''}}${{profitRatio.toFixed(1)}}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #FFEB3B 0%, #FFC107 100%); padding: 20px; border-radius: 12px; border: 3px solid #E52521;">
+                        <div style="display: flex; align-items: start; gap: 12px;">
+                            <div style="font-size: 32px; flex-shrink: 0;">🍄</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; color: #E52521; margin-bottom: 10px; font-size: 18px;">
+                                    马里奥的详细分析：
+                                </div>
+                                <div style="color: #333; line-height: 1.8; font-size: 15px;">
+                                    ${{marioExplanation}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ff9800;">
+                        <div style="font-weight: 600; color: #ff9800; margin-bottom: 8px;">
+                            ⚠️ 风险提示
+                        </div>
+                        <div style="color: #666; font-size: 14px; line-height: 1.6;">
+                            • 本建议基于技术分析，仅供参考<br>
+                            • 市场有风险，投资需谨慎<br>
+                            • 请根据自己的风险承受能力做决策<br>
+                            • 永远不要投入超过你能承受损失的资金
+                        </div>
+                    </div>
+                </div>
+            `;
+        }}
+        </script>
         
         <div class="footer">
             <div class="footer-item">
