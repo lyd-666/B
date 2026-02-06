@@ -1065,7 +1065,7 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
                     
                     {add_mario_explanation(
                         f"最新价格：${analysis['latest_close']:.2f}",
-                        f"就是现在金子值多少钱一盎司，约合人民币{analysis['latest_close']*7:.0f}元"
+                        f"就是现在金子值多少钱1克，约合人民币{analysis['latest_close']*7/31.1035:.0f}元"
                     )}
                 </div>
             </div>
