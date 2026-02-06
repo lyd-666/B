@@ -1,5 +1,6 @@
-# Generated HTML reports
+# Generated HTML reports (except index.html for GitHub Pages)
 gold_premarket_plan_*.html
+!index.html
 
 # Python
 __pycache__/

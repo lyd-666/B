@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黄金盘前计划 - 2026年02月06日</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .header .date {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title::before {
+            content: "▶";
+            color: #667eea;
+            margin-right: 8px;
+            font-size: 14px;
+        }
+        
+        .section-content {
+            color: #4a5568;
+            font-size: 15px;
+        }
+        
+        .highlight {
+            background: #fff5e1;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 3px solid #ffa500;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        
+        .scenario {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .scenario-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        
+        .scenario.bullish {
+            border-left: 4px solid #48bb78;
+        }
+        
+        .scenario.neutral {
+            border-left: 4px solid #ed8936;
+        }
+        
+        .scenario.bearish {
+            border-left: 4px solid #f56565;
+        }
+        
+        .condition-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .condition-list li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .condition-list li::before {
+            content: "•";
+            position: absolute;
+            left: 5px;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .risk-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .risk-list li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .risk-list li::before {
+            content: "⚠";
+            position: absolute;
+            left: 0;
+            color: #f56565;
+        }
+        
+        .confidence-bar {
+            width: 100%;
+            height: 30px;
+            background: #e2e8f0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            transition: width 1s ease;
+        }
+        
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .data-item {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .data-label {
+            font-size: 13px;
+            color: #718096;
+            margin-bottom: 5px;
+        }
+        
+        .data-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .discipline {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 500;
+            margin-top: 30px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #718096;
+            font-size: 13px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .change-positive {
+            color: #48bb78;
+        }
+        
+        .change-negative {
+            color: #f56565;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>黄金（GC=F）盘前计划</h1>
+            <div class="date">2026年02月06日 生成</div>
+        </div>
+        
+        <div class="content">
+            <!-- 晨会级摘要 -->
+            <div class="highlight" style="background: #e8f5e9; border-left: 4px solid #4caf50;">
+                🌅 <strong>晨会级摘要：</strong>黄金价格4897.95美元，上升趋势，均线呈多头排列。RSI 57.4（中性），MACD呈空头形态。框架清晰，置信度85%。
+            </div>
+            
+            <!-- 核心判断 -->
+            <div class="highlight">
+                📊 今日核心判断：黄金维持多头格局，收于4897.95，短期均线支撑有效。
+            </div>
+            
+            <!-- 趋势判断 -->
+            <div class="section">
+                <div class="section-title">趋势判断</div>
+                <div class="section-content">
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <div class="data-label">整体趋势</div>
+                            <div class="data-value" style="font-size: 16px;">上升</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">均线形态</div>
+                            <div class="data-value" style="font-size: 16px;">多头排列</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">RSI状态</div>
+                            <div class="data-value" style="font-size: 14px;">57.4 - 中性</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">MACD状态</div>
+                            <div class="data-value" style="font-size: 14px;">空头 (柱状:-0.56)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 技术指标证据 -->
+            <div class="section">
+                <div class="section-title">技术指标证据</div>
+                <div class="section-content">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px;">
+                        <div style="background: white; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                            <strong style="color: #667eea;">移动平均线</strong>
+                            <div style="margin-top: 8px; font-size: 13px;">
+                                MA5: 4865.33<br>
+                                MA10: 4864.66<br>
+                                MA20: 4838.94<br>
+                                排列: 多头排列
+                            </div>
+                        </div>
+                        <div style="background: white; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                            <strong style="color: #667eea;">RSI指标</strong>
+                            <div style="margin-top: 8px; font-size: 13px;">
+                                数值: 57.42<br>
+                                状态: 中性<br>
+                                <em style="color: #718096;">中性区间，无明确信号</em>
+                            </div>
+                        </div>
+                        <div style="background: white; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                            <strong style="color: #667eea;">MACD指标</strong>
+                            <div style="margin-top: 8px; font-size: 13px;">
+                                MACD: 29.164<br>
+                                信号线: 29.721<br>
+                                柱状图: -0.557<br>
+                                状态: 空头
+                            </div>
+                        </div>
+                        <div style="background: white; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                            <strong style="color: #667eea;">动能与波动</strong>
+                            <div style="margin-top: 8px; font-size: 13px;">
+                                动能: 正弱<br>
+                                波动率: 正常<br>
+                                ATR: 102.85
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 每日盘面点评 -->
+            <div class="section">
+                <div class="section-title">每日盘面点评</div>
+                <div class="section-content">
+                    <ul class="condition-list">
+                        <li>日内波动较大，涨跌幅达+1.19%</li><li>成交量萎缩26.5%，量价背离</li><li>价格位于接近区间高点</li><li>多头格局延续，上行动能充足</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 今日vs昨日复盘 -->
+            <div class="section">
+                <div class="section-title">今日 vs 昨日复盘</div>
+                <div class="section-content">
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <div class="data-label">收盘价</div>
+                            <div class="data-value" style="font-size: 14px;">
+                                昨: $4840.31<br>
+                                今: $4897.95<br>
+                                <span class="change-positive">+1.19%</span>
+                            </div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">成交量</div>
+                            <div class="data-value" style="font-size: 14px;">
+                                昨: 125,346<br>
+                                今: 92,161<br>
+                                -26.5%
+                            </div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">日内波幅</div>
+                            <div class="data-value" style="font-size: 14px;">
+                                高: $4958.58<br>
+                                低: $4827.91<br>
+                                幅: $130.67 (2.71%)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 近五日趋势叙事 -->
+            <div class="section">
+                <div class="section-title">近五日趋势叙事</div>
+                <div class="section-content">
+                    <p>近五日黄金价格区间4779.77-4958.58美元，整体呈震荡整理，涨跌幅+0.61%。期间出现反复，方向不够明确。</p>
+                </div>
+            </div>
+            
+            <!-- 趋势框架 -->
+            <div class="section">
+                <div class="section-title">趋势框架有效性</div>
+                <div class="section-content">
+                    有效 - 多头排列配合正动能，趋势延续性强。
+                    
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <div class="data-label">最新收盘</div>
+                            <div class="data-value">$4897.95</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">日内涨跌</div>
+                            <div class="data-value change-positive">
+                                +1.19%
+                            </div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">均线排列</div>
+                            <div class="data-value" style="font-size: 14px;">多头排列</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">波动状态</div>
+                            <div class="data-value" style="font-size: 14px;">正常</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 盘中关键触发条件 -->
+            <div class="section">
+                <div class="section-title">盘中关键触发条件</div>
+                <div class="section-content">
+                    <div class="scenario bullish">
+                        <div class="scenario-title">✓ 顺趋势情景</div>
+                        <ul class="condition-list">
+                            <li>价格守住MA5（4865.33）上方且创新高</li><li>成交量配合放大，动能保持正向</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="scenario neutral">
+                        <div class="scenario-title">◐ 观望情景</div>
+                        <ul class="condition-list">
+                            <li>价格在MA5与MA10（4864.66）之间震荡</li><li>波动收窄，等待方向选择</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="scenario bearish">
+                        <div class="scenario-title">✗ 结构失效情景</div>
+                        <ul class="condition-list">
+                            <li>有效跌破MA10（4864.66），对应约4761.81</li><li>连续两日收盘低于短期均线</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 风险与失效点 -->
+            <div class="section">
+                <div class="section-title">主要风险与判断失效点</div>
+                <div class="section-content">
+                    <div style="margin-bottom: 15px;">
+                        <strong>主要风险：</strong>
+                        <ul class="risk-list">
+                            <li>动能偏弱，趋势延续性存疑</li><li>需关注美元指数、美债收益率等宏观因子</li><li>地缘政治事件可能引发剧烈波动</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>判断失效点：</strong>
+                        <ul class="risk-list">
+                            <li>多头判断失效点：有效跌破MA10（4864.66）</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 判断失效条件详细 -->
+            <div class="section">
+                <div class="section-title">判断失效条件 - 多空临界点</div>
+                <div class="section-content">
+                    <div class="scenario bullish" style="margin-bottom: 15px;">
+                        <div class="scenario-title">🔴 多头失效临界点</div>
+                        <ul class="condition-list">
+                            <li>有效跌破MA10（4864.66）</li><li>连续两日收盘低于MA20（4838.94）</li>
+                        </ul>
+                    </div>
+                    <div class="scenario bearish">
+                        <div class="scenario-title">🟢 空头失效临界点</div>
+                        <ul class="condition-list">
+                            <li>有效突破MA10（4864.66）</li><li>连续两日收盘高于MA20（4838.94）</li><li>MACD金叉向上</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 参与强度 -->
+            <div class="section">
+                <div class="section-title">置信度评分与参与强度</div>
+                <div class="section-content">
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: 85%;">
+                            置信度 85%
+                        </div>
+                    </div>
+                    <p style="margin-top: 10px;">积极参与 - 框架清晰，信号明确，可适度放大仓位</p>
+                </div>
+            </div>
+            
+            <!-- 盘前纪律 -->
+            <div class="discipline">
+                💡 盘前纪律：严格止损，保护本金。
+            </div>
+        </div>
+        
+        <div class="footer">
+            数据来源：yfinance (GC=F) | 仅供参考，不构成投资建议
+        </div>
+    </div>
+</body>
+</html>
