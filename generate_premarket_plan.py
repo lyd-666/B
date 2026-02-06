@@ -743,7 +743,7 @@ def generate_invalidation_conditions(trend_data):
     return conditions
 
 
-def get_institutional_theme_colors(trend_data):
+def get_institutional_theme_colors():
     """
     生成机构级专业配色方案
     Generate institutional professional color scheme
@@ -753,10 +753,6 @@ def get_institutional_theme_colors(trend_data):
     - 强调色：金色（贵金属、价值）
     - 中性色：灰色系（专业、中立）
     """
-    analysis = trend_data['analysis']
-    confidence = trend_data['confidence']
-    trend = analysis['trend_direction']
-    
     # 机构级固定配色
     colors = {
         'primary': '#1a2332',      # 主色：深蓝灰
@@ -768,8 +764,7 @@ def get_institutional_theme_colors(trend_data):
         'text': '#2c3e50',         # 文本：深灰
         'background': '#f8f9fa',   # 背景：浅灰
         'border': '#d5d8dc',       # 边框：中灰
-        'theme_name': 'institutional',
-        'confidence': confidence
+        'theme_name': 'institutional'
     }
     
     return colors
