@@ -1096,12 +1096,12 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
                     
                     {add_mario_explanation(
                         f"RSI指标: {analysis.get('rsi', 50):.1f}",
-                        "这个数字告诉你金子是太抢手（>70超买）还是没人要（<30超卖），现在{analysis.get('rsi', 50):.1f}{'偏冷' if analysis.get('rsi', 50) < 40 else '偏热' if analysis.get('rsi', 50) > 60 else '正常'}"
+                        f"这个数字告诉你金子是太抢手（>70超买）还是没人要（<30超卖），现在{analysis.get('rsi', 50):.1f}{'偏冷' if analysis.get('rsi', 50) < 40 else '偏热' if analysis.get('rsi', 50) > 60 else '正常'}"
                     )}
                     
                     {add_mario_explanation(
                         f"均线排列：{analysis['ma_alignment']}",
-                        "{'像上楼梯，越走越高，看涨！' if analysis['ma_alignment'] == '多头排列' else '像下楼梯，越走越低，要小心' if analysis['ma_alignment'] == '空头排列' else '上上下下，方向不明'}"
+                        f"{'像上楼梯，越走越高，看涨！' if analysis['ma_alignment'] == '多头排列' else '像下楼梯，越走越低，要小心' if analysis['ma_alignment'] == '空头排列' else '上上下下，方向不明'}"
                     )}
                 </div>
             </div>
