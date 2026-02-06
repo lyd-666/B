@@ -743,52 +743,32 @@ def generate_invalidation_conditions(trend_data):
     return conditions
 
 
-def get_one_piece_theme_colors(trend_data):
+def get_institutional_theme_colors(trend_data):
     """
-    根据市场行情生成海贼王主题动态配色
-    Generate One Piece themed dynamic colors based on market conditions
+    生成机构级专业配色方案
+    Generate institutional professional color scheme
     
-    颜色方案：
-    - 上涨趋势：金色/橙色（路飞的草帽、阳光）
-    - 下跌趋势：深蓝/紫色（深海）
-    - 震荡：海洋渐变色
-    - 置信度影响饱和度：越高越鲜艳
+    配色方案：专业、商务、稳重
+    - 基础色：深蓝色系（信任、稳定）
+    - 强调色：金色（贵金属、价值）
+    - 中性色：灰色系（专业、中立）
     """
     analysis = trend_data['analysis']
     confidence = trend_data['confidence']
     trend = analysis['trend_direction']
     
-    # 基础配色
-    if trend == "上升":
-        # 上涨：金色橙色主题（路飞、阳光、财宝）
-        base_hue_start = 30  # 橙色
-        base_hue_end = 50    # 金黄色
-        theme_name = "treasure"
-    elif trend == "下降":
-        # 下跌：深蓝紫色主题（深海、风暴）
-        base_hue_start = 220  # 深蓝
-        base_hue_end = 280    # 紫色
-        theme_name = "ocean_deep"
-    else:
-        # 震荡：海洋渐变（大海、冒险）
-        base_hue_start = 180  # 青色
-        base_hue_end = 220    # 蓝色
-        theme_name = "ocean"
-    
-    # 根据置信度调整饱和度和亮度
-    # 置信度越高，颜色越鲜艳
-    saturation = 50 + (confidence * 0.5)  # 50-100%
-    lightness_bg = 20 + (confidence * 0.3)  # 20-50%
-    lightness_header = 35 + (confidence * 0.35)  # 35-70%
-    
-    # 生成HSL颜色
+    # 机构级固定配色
     colors = {
-        'bg_start': f"hsl({base_hue_start}, {saturation}%, {lightness_bg}%)",
-        'bg_end': f"hsl({base_hue_end}, {saturation}%, {lightness_bg + 10}%)",
-        'header_start': f"hsl({base_hue_start + 10}, {saturation + 10}%, {lightness_header}%)",
-        'header_end': f"hsl({base_hue_end - 10}, {saturation + 10}%, {lightness_header + 10}%)",
-        'accent': f"hsl({(base_hue_start + base_hue_end) // 2}, {saturation + 20}%, {lightness_header + 15}%)",
-        'theme_name': theme_name,
+        'primary': '#1a2332',      # 主色：深蓝灰
+        'secondary': '#2c3e50',    # 次色：商务蓝灰
+        'accent': '#d4af37',       # 强调：专业金色
+        'success': '#27ae60',      # 成功：绿色
+        'warning': '#f39c12',      # 警告：橙色
+        'danger': '#e74c3c',       # 危险：红色
+        'text': '#2c3e50',         # 文本：深灰
+        'background': '#f8f9fa',   # 背景：浅灰
+        'border': '#d5d8dc',       # 边框：中灰
+        'theme_name': 'institutional',
         'confidence': confidence
     }
     
@@ -809,24 +789,12 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
     participation = generate_participation_intensity(confidence)
     discipline = generate_discipline()
     
-    # 新增模块内容
-    morning_summary = generate_morning_summary(trend_data, df)
-    trend_judgment = generate_trend_judgment(trend_data)
-    tech_evidence = generate_technical_evidence(trend_data, df)
-    daily_commentary = generate_daily_commentary(trend_data)
-    today_vs_yesterday = generate_today_vs_yesterday(trend_data)
-    five_day_narrative = generate_five_day_narrative(df)
-    invalidation_conds = generate_invalidation_conditions(trend_data)
-    
-    # 获取动态配色
-    theme_colors = get_one_piece_theme_colors(trend_data)
-    
     html_content = f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>点点的金价分析 - {timestamp.strftime('%Y年%m月%d日')}</title>
+    <title>黄金盘前计划 - {timestamp.strftime('%Y年%m月%d日')}</title>
     <style>
         * {{
             margin: 0;
@@ -834,247 +802,115 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
             box-sizing: border-box;
         }}
         
-        @keyframes wave {{
-            0% {{ transform: translateX(0) translateY(0); }}
-            50% {{ transform: translateX(-25%) translateY(-10px); }}
-            100% {{ transform: translateX(0) translateY(0); }}
-        }}
-        
-        @keyframes float {{
-            0%, 100% {{ transform: translateY(0px); }}
-            50% {{ transform: translateY(-20px); }}
-        }}
-        
-        @keyframes pulse {{
-            0%, 100% {{ opacity: 0.8; transform: scale(1); }}
-            50% {{ opacity: 1; transform: scale(1.05); }}
-        }}
-        
-        @keyframes treasure-glow {{
-            0%, 100% {{ box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }}
-            50% {{ box-shadow: 0 0 40px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 165, 0, 0.5); }}
-        }}
-        
         body {{
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
-            background: linear-gradient(135deg, {theme_colors['bg_start']} 0%, {theme_colors['bg_end']} 100%);
+            background: #f5f7fa;
             min-height: 100vh;
             padding: 20px;
             line-height: 1.6;
-            position: relative;
-            overflow-x: hidden;
-        }}
-        
-        /* 海浪背景动画 */
-        body::before {{
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 200%;
-            height: 100%;
-            background: 
-                radial-gradient(ellipse at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 70%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
-            animation: wave 20s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 0;
-        }}
-        
-        /* 粒子效果 */
-        body::after {{
-            content: "⚓ 🏴‍☠️ 💰 ⛵ 🗡️ 👑 💎 🌊";
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            font-size: 30px;
-            opacity: 0.1;
-            animation: float 15s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 0;
-            transform: translate(-50%, -50%);
-            letter-spacing: 40px;
         }}
         
         .container {{
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 100px rgba(255, 215, 0, 0.1);
-            overflow: hidden;
-            position: relative;
-            z-index: 1;
-            backdrop-filter: blur(10px);
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }}
         
         .header {{
-            background: linear-gradient(135deg, {theme_colors['header_start']} 0%, {theme_colors['header_end']} 100%);
+            background: #1a2332;
             color: white;
-            padding: 40px 30px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }}
-        
-        .header::before {{
-            content: "🏴‍☠️";
-            position: absolute;
-            top: 10px;
-            left: 20px;
-            font-size: 50px;
-            opacity: 0.3;
-            animation: pulse 3s ease-in-out infinite;
-        }}
-        
-        .header::after {{
-            content: "⚓";
-            position: absolute;
-            bottom: 10px;
-            right: 20px;
-            font-size: 50px;
-            opacity: 0.3;
-            animation: pulse 3s ease-in-out infinite 1.5s;
+            padding: 30px 40px;
+            border-bottom: 3px solid #d4af37;
         }}
         
         .header h1 {{
-            font-size: 36px;
-            margin-bottom: 10px;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            letter-spacing: 2px;
-            animation: pulse 2s ease-in-out infinite;
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            letter-spacing: 1px;
         }}
         
         .header .date {{
-            font-size: 16px;
-            opacity: 0.9;
-            font-weight: 500;
+            font-size: 14px;
+            opacity: 0.85;
+            font-weight: 400;
         }}
         
         .content {{
-            padding: 40px 30px;
+            padding: 40px;
         }}
         
-        .section {{
-            margin-bottom: 25px;
-            padding: 25px;
-            background: linear-gradient(135deg, rgba(248, 249, 250, 0.8) 0%, rgba(255, 255, 255, 0.9) 100%);
-            border-radius: 15px;
-            border-left: 5px solid {theme_colors['accent']};
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+        .core-module {{
+            margin-bottom: 30px;
+            padding: 24px;
+            background: #ffffff;
+            border: 1px solid #e1e4e8;
+            border-left: 4px solid #d4af37;
         }}
         
-        .section:hover {{
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            border-left-width: 8px;
-        }}
-        
-        .section::before {{
-            content: "";
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, {theme_colors['accent']} 0%, transparent 70%);
-            opacity: 0.05;
-            pointer-events: none;
-        }}
-        
-        .section-title {{
-            font-size: 20px;
+        .module-number {{
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background: #d4af37;
+            color: white;
+            text-align: center;
+            line-height: 28px;
+            border-radius: 50%;
             font-weight: 700;
-            color: #2d3748;
-            margin-bottom: 18px;
+            font-size: 14px;
+            margin-right: 10px;
+        }}
+        
+        .module-title {{
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a2332;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }}
         
-        .section-title::before {{
-            content: "⚡";
-            color: {theme_colors['accent']};
-            margin-right: 10px;
-            font-size: 20px;
-            animation: pulse 2s ease-in-out infinite;
+        .module-content {{
+            color: #2c3e50;
+            font-size: 15px;
+            line-height: 1.8;
         }}
         
-        .section-content {{
-            color: #4a5568;
+        .trigger-section {{
+            background: #f8f9fa;
+            padding: 16px;
+            margin: 12px 0;
+            border-left: 3px solid #2c3e50;
+        }}
+        
+        .trigger-title {{
+            font-weight: 700;
+            color: #1a2332;
+            margin-bottom: 8px;
             font-size: 15px;
         }}
         
-        .highlight {{
-            background: linear-gradient(135deg, rgba(255, 245, 225, 0.9) 0%, rgba(255, 250, 240, 0.9) 100%);
-            padding: 20px;
-            border-radius: 12px;
-            border-left: 4px solid #ffa500;
-            font-size: 17px;
-            font-weight: 600;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(255, 165, 0, 0.2);
-            animation: treasure-glow 3s ease-in-out infinite;
-        }}
-        
-        .scenario {{
-            background: rgba(255, 255, 255, 0.9);
-            padding: 18px;
-            margin: 12px 0;
-            border-radius: 12px;
-            border: 2px solid #e2e8f0;
-            transition: all 0.3s ease;
-        }}
-        
-        .scenario:hover {{
-            transform: translateX(5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }}
-        
-        .scenario-title {{
-            font-weight: 700;
-            color: #2d3748;
-            margin-bottom: 10px;
-            font-size: 16px;
-        }}
-        
-        .scenario.bullish {{
-            border-left: 5px solid #48bb78;
-            background: linear-gradient(135deg, rgba(72, 187, 120, 0.05) 0%, rgba(255, 255, 255, 0.9) 100%);
-        }}
-        
-        .scenario.neutral {{
-            border-left: 5px solid #ed8936;
-            background: linear-gradient(135deg, rgba(237, 137, 54, 0.05) 0%, rgba(255, 255, 255, 0.9) 100%);
-        }}
-        
-        .scenario.bearish {{
-            border-left: 5px solid #f56565;
-            background: linear-gradient(135deg, rgba(245, 101, 101, 0.05) 0%, rgba(255, 255, 255, 0.9) 100%);
-        }}
-        
-        .condition-list {{
+        .trigger-list {{
             list-style: none;
             padding-left: 0;
         }}
         
-        .condition-list li {{
+        .trigger-list li {{
             padding: 6px 0;
-            padding-left: 25px;
+            padding-left: 20px;
             position: relative;
+            color: #2c3e50;
         }}
         
-        .condition-list li::before {{
-            content: "⚓";
+        .trigger-list li::before {{
+            content: "•";
             position: absolute;
             left: 5px;
-            color: {theme_colors['accent']};
+            color: #d4af37;
             font-weight: bold;
+            font-size: 18px;
         }}
         
         .risk-list {{
@@ -1083,125 +919,89 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
         }}
         
         .risk-list li {{
-            padding: 10px 0;
-            padding-left: 25px;
+            padding: 8px 0;
+            padding-left: 20px;
             position: relative;
+            color: #2c3e50;
         }}
         
         .risk-list li::before {{
-            content: "⚠";
+            content: "▸";
             position: absolute;
-            left: 0;
-            color: #f56565;
-            font-size: 18px;
+            left: 5px;
+            color: #d4af37;
+            font-weight: bold;
         }}
         
         .confidence-bar {{
             width: 100%;
-            height: 35px;
-            background: linear-gradient(90deg, #e2e8f0 0%, #cbd5e0 100%);
-            border-radius: 20px;
+            height: 32px;
+            background: #e1e4e8;
+            border-radius: 4px;
             overflow: hidden;
-            margin: 15px 0;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+            margin: 12px 0;
         }}
         
         .confidence-fill {{
             height: 100%;
-            background: linear-gradient(90deg, {theme_colors['header_start']} 0%, {theme_colors['accent']} 100%);
+            background: linear-gradient(90deg, #1a2332 0%, #2c3e50 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: 700;
-            font-size: 16px;
-            transition: width 2s ease;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-            animation: treasure-glow 3s ease-in-out infinite;
-        }}
-        
-        .data-grid {{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }}
-        
-        .data-item {{
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.95) 100%);
-            padding: 18px;
-            border-radius: 12px;
-            border: 2px solid {theme_colors['accent']};
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-        }}
-        
-        .data-item:hover {{
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            border-color: {theme_colors['header_start']};
-        }}
-        
-        .data-label {{
-            font-size: 14px;
-            color: #718096;
-            margin-bottom: 8px;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 14px;
         }}
         
-        .data-value {{
-            font-size: 20px;
-            font-weight: 700;
-            color: #2d3748;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
-        }}
-        
-        .discipline {{
-            background: linear-gradient(135deg, {theme_colors['header_start']} 0%, {theme_colors['header_end']} 100%);
+        .discipline-box {{
+            background: #1a2332;
             color: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            font-size: 18px;
-            font-weight: 700;
+            padding: 20px 24px;
+            border-left: 4px solid #d4af37;
+            font-size: 16px;
+            font-weight: 600;
             margin-top: 30px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-            animation: pulse 3s ease-in-out infinite;
         }}
         
         .footer {{
-            text-align: center;
-            padding: 25px;
-            color: #718096;
-            font-size: 14px;
-            border-top: 2px solid {theme_colors['accent']};
-            background: linear-gradient(135deg, rgba(248, 249, 250, 0.5) 0%, rgba(255, 255, 255, 0.8) 100%);
+            text-align: left;
+            padding: 30px 40px;
+            color: #6c757d;
+            font-size: 13px;
+            border-top: 1px solid #e1e4e8;
+            background: #f8f9fa;
+            line-height: 1.8;
         }}
         
-        .change-positive {{
-            color: #48bb78;
-            font-weight: 700;
+        .footer-item {{
+            margin-bottom: 6px;
         }}
         
-        .change-negative {{
-            color: #f56565;
-            font-weight: 700;
+        .footer-label {{
+            font-weight: 600;
+            color: #495057;
         }}
         
         /* 响应式设计 */
         @media (max-width: 768px) {{
+            .header {{
+                padding: 20px 24px;
+            }}
+            
             .header h1 {{
-                font-size: 28px;
+                font-size: 24px;
             }}
             
-            .data-grid {{
-                grid-template-columns: 1fr;
+            .content {{
+                padding: 24px;
             }}
             
-            .section {{
+            .core-module {{
                 padding: 20px;
+            }}
+            
+            .footer {{
+                padding: 20px 24px;
             }}
         }}
     </style>
@@ -1209,208 +1009,78 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
 <body>
     <div class="container">
         <div class="header">
-            <h1>点点的金价分析</h1>
-            <div class="date">{timestamp.strftime('%Y年%m月%d日')} 生成</div>
+            <h1>黄金盘前计划</h1>
+            <div class="date">{timestamp.strftime('%Y年%m月%d日')}</div>
         </div>
         
         <div class="content">
-            <!-- 晨会级摘要 -->
-            <div class="highlight" style="background: #e8f5e9; border-left: 4px solid #4caf50;">
-                🌅 <strong>晨会级摘要：</strong>{morning_summary}
-            </div>
-            
-            <!-- 核心判断 -->
-            <div class="highlight">
-                📊 今日核心判断：{core_judgment}
-            </div>
-            
-            <!-- 趋势判断 -->
-            <div class="section">
-                <div class="section-title">趋势判断</div>
-                <div class="section-content">
-                    <div class="data-grid">
-                        <div class="data-item">
-                            <div class="data-label">整体趋势</div>
-                            <div class="data-value" style="font-size: 16px;">{trend_judgment['整体趋势']}</div>
-                        </div>
-                        <div class="data-item">
-                            <div class="data-label">均线形态</div>
-                            <div class="data-value" style="font-size: 16px;">{trend_judgment['均线形态']}</div>
-                        </div>
-                        <div class="data-item">
-                            <div class="data-label">RSI状态</div>
-                            <div class="data-value" style="font-size: 14px;">{trend_judgment['RSI状态']}</div>
-                        </div>
-                        <div class="data-item">
-                            <div class="data-label">MACD状态</div>
-                            <div class="data-value" style="font-size: 14px;">{trend_judgment['MACD状态']}</div>
-                        </div>
-                    </div>
+            <!-- ① 今日核心判断 -->
+            <div class="core-module">
+                <div class="module-title">
+                    <span class="module-number">①</span>
+                    今日核心判断
+                </div>
+                <div class="module-content">
+                    {core_judgment}
                 </div>
             </div>
             
-            <!-- 技术指标证据 -->
-            <div class="section">
-                <div class="section-title">技术指标证据</div>
-                <div class="section-content">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px;">
-                        <div style="background: white; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
-                            <strong style="color: #667eea;">移动平均线</strong>
-                            <div style="margin-top: 8px; font-size: 13px;">
-                                MA5: {tech_evidence['移动平均线']['MA5']}<br>
-                                MA10: {tech_evidence['移动平均线']['MA10']}<br>
-                                MA20: {tech_evidence['移动平均线']['MA20']}<br>
-                                排列: {tech_evidence['移动平均线']['排列']}
-                            </div>
-                        </div>
-                        <div style="background: white; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
-                            <strong style="color: #667eea;">RSI指标</strong>
-                            <div style="margin-top: 8px; font-size: 13px;">
-                                数值: {tech_evidence['RSI指标']['数值']}<br>
-                                状态: {tech_evidence['RSI指标']['状态']}<br>
-                                <em style="color: #718096;">{tech_evidence['RSI指标']['研判']}</em>
-                            </div>
-                        </div>
-                        <div style="background: white; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
-                            <strong style="color: #667eea;">MACD指标</strong>
-                            <div style="margin-top: 8px; font-size: 13px;">
-                                MACD: {tech_evidence['MACD指标']['MACD']}<br>
-                                信号线: {tech_evidence['MACD指标']['信号线']}<br>
-                                柱状图: {tech_evidence['MACD指标']['柱状图']}<br>
-                                状态: {tech_evidence['MACD指标']['状态']}
-                            </div>
-                        </div>
-                        <div style="background: white; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
-                            <strong style="color: #667eea;">动能与波动</strong>
-                            <div style="margin-top: 8px; font-size: 13px;">
-                                动能: {tech_evidence['动能与波动']['动能']}<br>
-                                波动率: {tech_evidence['动能与波动']['波动率']}<br>
-                                ATR: {tech_evidence['动能与波动']['ATR']}
-                            </div>
-                        </div>
-                    </div>
+            <!-- ② 今日趋势框架是否有效 -->
+            <div class="core-module">
+                <div class="module-title">
+                    <span class="module-number">②</span>
+                    今日趋势框架是否有效
                 </div>
-            </div>
-            
-            <!-- 每日盘面点评 -->
-            <div class="section">
-                <div class="section-title">每日盘面点评</div>
-                <div class="section-content">
-                    <ul class="condition-list">
-                        {''.join([f'<li>{comment}</li>' for comment in daily_commentary])}
-                    </ul>
-                </div>
-            </div>
-            
-            <!-- 今日vs昨日复盘 -->
-            <div class="section">
-                <div class="section-title">今日 vs 昨日复盘</div>
-                <div class="section-content">
-                    <div class="data-grid">
-                        <div class="data-item">
-                            <div class="data-label">收盘价</div>
-                            <div class="data-value" style="font-size: 14px;">
-                                昨: {today_vs_yesterday['收盘价对比']['昨日']}<br>
-                                今: {today_vs_yesterday['收盘价对比']['今日']}<br>
-                                <span class="{'change-positive' if analysis['change_pct'] > 0 else 'change-negative'}">{today_vs_yesterday['收盘价对比']['涨跌']}</span>
-                            </div>
-                        </div>
-                        <div class="data-item">
-                            <div class="data-label">成交量</div>
-                            <div class="data-value" style="font-size: 14px;">
-                                昨: {today_vs_yesterday['成交量对比']['昨日']}<br>
-                                今: {today_vs_yesterday['成交量对比']['今日']}<br>
-                                {today_vs_yesterday['成交量对比']['变化']}
-                            </div>
-                        </div>
-                        <div class="data-item">
-                            <div class="data-label">日内波幅</div>
-                            <div class="data-value" style="font-size: 14px;">
-                                高: {today_vs_yesterday['日内波幅']['最高']}<br>
-                                低: {today_vs_yesterday['日内波幅']['最低']}<br>
-                                幅: {today_vs_yesterday['日内波幅']['波幅']}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 近五日趋势叙事 -->
-            <div class="section">
-                <div class="section-title">近五日趋势叙事</div>
-                <div class="section-content">
-                    <p>{five_day_narrative}</p>
-                </div>
-            </div>
-            
-            <!-- 趋势框架 -->
-            <div class="section">
-                <div class="section-title">趋势框架有效性</div>
-                <div class="section-content">
+                <div class="module-content">
                     {framework_validity}
-                    
-                    <div class="data-grid">
-                        <div class="data-item">
-                            <div class="data-label">最新收盘</div>
-                            <div class="data-value">${analysis['latest_close']:.2f}</div>
-                        </div>
-                        <div class="data-item">
-                            <div class="data-label">日内涨跌</div>
-                            <div class="data-value {'change-positive' if analysis['change_pct'] > 0 else 'change-negative'}">
-                                {analysis['change_pct']:+.2f}%
-                            </div>
-                        </div>
-                        <div class="data-item">
-                            <div class="data-label">均线排列</div>
-                            <div class="data-value" style="font-size: 14px;">{analysis['ma_alignment']}</div>
-                        </div>
-                        <div class="data-item">
-                            <div class="data-label">波动状态</div>
-                            <div class="data-value" style="font-size: 14px;">{analysis['volatility_level']}</div>
-                        </div>
-                    </div>
                 </div>
             </div>
             
-            <!-- 盘中关键触发条件 -->
-            <div class="section">
-                <div class="section-title">盘中关键触发条件</div>
-                <div class="section-content">
-                    <div class="scenario bullish">
-                        <div class="scenario-title">✓ 顺趋势情景</div>
-                        <ul class="condition-list">
+            <!-- ③ 盘中关键触发条件 -->
+            <div class="core-module">
+                <div class="module-title">
+                    <span class="module-number">③</span>
+                    盘中关键触发条件
+                </div>
+                <div class="module-content">
+                    <div class="trigger-section">
+                        <div class="trigger-title">顺趋势情景</div>
+                        <ul class="trigger-list">
                             {''.join([f'<li>{cond}</li>' for cond in conditions['trend_following']])}
                         </ul>
                     </div>
                     
-                    <div class="scenario neutral">
-                        <div class="scenario-title">◐ 观望情景</div>
-                        <ul class="condition-list">
+                    <div class="trigger-section">
+                        <div class="trigger-title">观望情景</div>
+                        <ul class="trigger-list">
                             {''.join([f'<li>{cond}</li>' for cond in conditions['wait_and_see']])}
                         </ul>
                     </div>
                     
-                    <div class="scenario bearish">
-                        <div class="scenario-title">✗ 结构失效情景</div>
-                        <ul class="condition-list">
+                    <div class="trigger-section">
+                        <div class="trigger-title">结构失效情景</div>
+                        <ul class="trigger-list">
                             {''.join([f'<li>{cond}</li>' for cond in conditions['structure_failure']])}
                         </ul>
                     </div>
                 </div>
             </div>
             
-            <!-- 风险与失效点 -->
-            <div class="section">
-                <div class="section-title">主要风险与判断失效点</div>
-                <div class="section-content">
-                    <div style="margin-bottom: 15px;">
-                        <strong>主要风险：</strong>
+            <!-- ④ 主要风险与判断失效点 -->
+            <div class="core-module">
+                <div class="module-title">
+                    <span class="module-number">④</span>
+                    主要风险与判断失效点
+                </div>
+                <div class="module-content">
+                    <div style="margin-bottom: 20px;">
+                        <strong style="color: #1a2332;">主要风险：</strong>
                         <ul class="risk-list">
                             {''.join([f'<li>{risk}</li>' for risk in risks['risks']])}
                         </ul>
                     </div>
                     <div>
-                        <strong>判断失效点：</strong>
+                        <strong style="color: #1a2332;">判断失效点：</strong>
                         <ul class="risk-list">
                             {''.join([f'<li>{point}</li>' for point in risks['invalidation_points']])}
                         </ul>
@@ -1418,59 +1088,51 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
                 </div>
             </div>
             
-            <!-- 判断失效条件详细 -->
-            <div class="section">
-                <div class="section-title">判断失效条件 - 多空临界点</div>
-                <div class="section-content">
-                    <div class="scenario bullish" style="margin-bottom: 15px;">
-                        <div class="scenario-title">🔴 多头失效临界点</div>
-                        <ul class="condition-list">
-                            {''.join([f'<li>{cond}</li>' for cond in invalidation_conds['多头失效']])}
-                        </ul>
-                    </div>
-                    <div class="scenario bearish">
-                        <div class="scenario-title">🟢 空头失效临界点</div>
-                        <ul class="condition-list">
-                            {''.join([f'<li>{cond}</li>' for cond in invalidation_conds['空头失效']])}
-                        </ul>
-                    </div>
+            <!-- ⑤ 今日参与强度 -->
+            <div class="core-module">
+                <div class="module-title">
+                    <span class="module-number">⑤</span>
+                    今日参与强度
                 </div>
-            </div>
-            
-            <!-- 参与强度 -->
-            <div class="section">
-                <div class="section-title">置信度评分与参与强度</div>
-                <div class="section-content">
+                <div class="module-content">
                     <div class="confidence-bar">
                         <div class="confidence-fill" style="width: {confidence}%;">
                             置信度 {confidence}%
                         </div>
                     </div>
-                    <p style="margin-top: 10px;">{participation}</p>
+                    <p style="margin-top: 12px;">{participation}</p>
                 </div>
             </div>
             
-            <!-- 盘前纪律 -->
-            <div class="discipline">
-                💡 盘前纪律：{discipline}
+            <!-- ⑥ 一句话盘前纪律 -->
+            <div class="core-module">
+                <div class="module-title">
+                    <span class="module-number">⑥</span>
+                    一句话盘前纪律
+                </div>
+                <div class="module-content">
+                    <div class="discipline-box">
+                        {discipline}
+                    </div>
+                </div>
             </div>
         </div>
         
         <div class="footer">
-            <div style="margin-bottom: 8px;">
-                <strong>数据来源：</strong>{df.attrs.get('data_source', 'Yahoo Finance (GC=F)')}
+            <div class="footer-item">
+                <span class="footer-label">数据来源：</span>{df.attrs.get('data_source', 'Yahoo Finance (GC=F)')}
             </div>
-            <div style="margin-bottom: 8px;">
-                <strong>数据范围：</strong>{df.index[0].strftime('%Y年%m月%d日')} 至 {df.index[-1].strftime('%Y年%m月%d日')} (共 {len(df)} 个交易日)
+            <div class="footer-item">
+                <span class="footer-label">数据范围：</span>{df.index[0].strftime('%Y年%m月%d日')} 至 {df.index[-1].strftime('%Y年%m月%d日')} (共 {len(df)} 个交易日)
             </div>
-            <div style="margin-bottom: 8px;">
-                <strong>数据获取时间：</strong>{df.attrs.get('fetch_time', timestamp).strftime('%Y年%m月%d日 %H:%M:%S')}
+            <div class="footer-item">
+                <span class="footer-label">数据获取时间：</span>{df.attrs.get('fetch_time', timestamp).strftime('%Y年%m月%d日 %H:%M:%S')}
             </div>
-            <div style="margin-bottom: 8px;">
-                <strong>报告生成时间：</strong>{timestamp.strftime('%Y年%m月%d日 %H:%M:%S')}
+            <div class="footer-item">
+                <span class="footer-label">报告生成时间：</span>{timestamp.strftime('%Y年%m月%d日 %H:%M:%S')}
             </div>
-            <div style="margin-top: 12px; font-size: 12px; opacity: 0.8;">
-                ⚠️ 仅供参考，不构成投资建议
+            <div style="margin-top: 16px; font-size: 12px; color: #868e96;">
+                免责声明：本报告仅供参考，不构成投资建议
             </div>
         </div>
     </div>
