@@ -11,66 +11,175 @@
             box-sizing: border-box;
         }
         
+        @keyframes wave {
+            0% { transform: translateX(0) translateY(0); }
+            50% { transform: translateX(-25%) translateY(-10px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        
+        @keyframes treasure-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 165, 0, 0.5); }
+        }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, hsl(180, 80.0%, 38.0%) 0%, hsl(220, 80.0%, 48.0%) 100%);
+            min-height: 100vh;
             padding: 20px;
             line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* 海浪背景动画 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+            animation: wave 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* 粒子效果 */
+        body::after {
+            content: "⚓ 🏴‍☠️ 💰 ⛵ 🗡️ 👑 💎 🌊";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            font-size: 30px;
+            opacity: 0.1;
+            animation: float 15s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+            transform: translate(-50%, -50%);
+            letter-spacing: 40px;
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 100px rgba(255, 215, 0, 0.1);
             overflow: hidden;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
         }
         
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, hsl(190, 90.0%, 56.0%) 0%, hsl(210, 90.0%, 66.0%) 100%);
             color: white;
-            padding: 30px;
+            padding: 40px 30px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        .header::before {
+            content: "🏴‍☠️";
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 50px;
+            opacity: 0.3;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        .header::after {
+            content: "⚓";
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 50px;
+            opacity: 0.3;
+            animation: pulse 3s ease-in-out infinite 1.5s;
         }
         
         .header h1 {
-            font-size: 28px;
+            font-size: 36px;
             margin-bottom: 10px;
-            font-weight: 600;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 2px;
+            animation: pulse 2s ease-in-out infinite;
         }
         
         .header .date {
-            font-size: 14px;
+            font-size: 16px;
             opacity: 0.9;
+            font-weight: 500;
         }
         
         .content {
-            padding: 30px;
+            padding: 40px 30px;
         }
         
         .section {
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
+            margin-bottom: 25px;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(248, 249, 250, 0.8) 0%, rgba(255, 255, 255, 0.9) 100%);
+            border-radius: 15px;
+            border-left: 5px solid hsl(200, 100.0%, 71.0%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-left-width: 8px;
+        }
+        
+        .section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, hsl(200, 100.0%, 71.0%) 0%, transparent 70%);
+            opacity: 0.05;
+            pointer-events: none;
         }
         
         .section-title {
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 20px;
+            font-weight: 700;
             color: #2d3748;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
             display: flex;
             align-items: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
         
         .section-title::before {
-            content: "▶";
-            color: #667eea;
-            margin-right: 8px;
-            font-size: 14px;
+            content: "⚡";
+            color: hsl(200, 100.0%, 71.0%);
+            margin-right: 10px;
+            font-size: 20px;
+            animation: pulse 2s ease-in-out infinite;
         }
         
         .section-content {
@@ -79,40 +188,51 @@
         }
         
         .highlight {
-            background: #fff5e1;
-            padding: 15px;
-            border-radius: 6px;
-            border-left: 3px solid #ffa500;
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, rgba(255, 245, 225, 0.9) 0%, rgba(255, 250, 240, 0.9) 100%);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #ffa500;
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(255, 165, 0, 0.2);
+            animation: treasure-glow 3s ease-in-out infinite;
         }
         
         .scenario {
-            background: white;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 6px;
-            border: 1px solid #e2e8f0;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 18px;
+            margin: 12px 0;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .scenario:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         
         .scenario-title {
-            font-weight: 600;
+            font-weight: 700;
             color: #2d3748;
-            margin-bottom: 8px;
-            font-size: 15px;
+            margin-bottom: 10px;
+            font-size: 16px;
         }
         
         .scenario.bullish {
-            border-left: 4px solid #48bb78;
+            border-left: 5px solid #48bb78;
+            background: linear-gradient(135deg, rgba(72, 187, 120, 0.05) 0%, rgba(255, 255, 255, 0.9) 100%);
         }
         
         .scenario.neutral {
-            border-left: 4px solid #ed8936;
+            border-left: 5px solid #ed8936;
+            background: linear-gradient(135deg, rgba(237, 137, 54, 0.05) 0%, rgba(255, 255, 255, 0.9) 100%);
         }
         
         .scenario.bearish {
-            border-left: 4px solid #f56565;
+            border-left: 5px solid #f56565;
+            background: linear-gradient(135deg, rgba(245, 101, 101, 0.05) 0%, rgba(255, 255, 255, 0.9) 100%);
         }
         
         .condition-list {
@@ -121,16 +241,16 @@
         }
         
         .condition-list li {
-            padding: 5px 0;
-            padding-left: 20px;
+            padding: 6px 0;
+            padding-left: 25px;
             position: relative;
         }
         
         .condition-list li::before {
-            content: "•";
+            content: "⚓";
             position: absolute;
             left: 5px;
-            color: #667eea;
+            color: hsl(200, 100.0%, 71.0%);
             font-weight: bold;
         }
         
@@ -140,8 +260,8 @@
         }
         
         .risk-list li {
-            padding: 8px 0;
-            padding-left: 20px;
+            padding: 10px 0;
+            padding-left: 25px;
             position: relative;
         }
         
@@ -150,80 +270,116 @@
             position: absolute;
             left: 0;
             color: #f56565;
+            font-size: 18px;
         }
         
         .confidence-bar {
             width: 100%;
-            height: 30px;
-            background: #e2e8f0;
-            border-radius: 15px;
+            height: 35px;
+            background: linear-gradient(90deg, #e2e8f0 0%, #cbd5e0 100%);
+            border-radius: 20px;
             overflow: hidden;
-            margin: 10px 0;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
         }
         
         .confidence-fill {
             height: 100%;
-            background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);
+            background: linear-gradient(90deg, hsl(190, 90.0%, 56.0%) 0%, hsl(200, 100.0%, 71.0%) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: 600;
-            font-size: 14px;
-            transition: width 1s ease;
+            font-weight: 700;
+            font-size: 16px;
+            transition: width 2s ease;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            animation: treasure-glow 3s ease-in-out infinite;
         }
         
         .data-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
         }
         
         .data-item {
-            background: white;
-            padding: 12px;
-            border-radius: 6px;
-            border: 1px solid #e2e8f0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.95) 100%);
+            padding: 18px;
+            border-radius: 12px;
+            border: 2px solid hsl(200, 100.0%, 71.0%);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .data-item:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border-color: hsl(190, 90.0%, 56.0%);
         }
         
         .data-label {
-            font-size: 13px;
+            font-size: 14px;
             color: #718096;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         
         .data-value {
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 20px;
+            font-weight: 700;
             color: #2d3748;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
         }
         
         .discipline {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, hsl(190, 90.0%, 56.0%) 0%, hsl(210, 90.0%, 66.0%) 100%);
             color: white;
-            padding: 20px;
-            border-radius: 8px;
+            padding: 25px;
+            border-radius: 15px;
             text-align: center;
-            font-size: 16px;
-            font-weight: 500;
+            font-size: 18px;
+            font-weight: 700;
             margin-top: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            animation: pulse 3s ease-in-out infinite;
         }
         
         .footer {
             text-align: center;
-            padding: 20px;
+            padding: 25px;
             color: #718096;
-            font-size: 13px;
-            border-top: 1px solid #e2e8f0;
+            font-size: 14px;
+            border-top: 2px solid hsl(200, 100.0%, 71.0%);
+            background: linear-gradient(135deg, rgba(248, 249, 250, 0.5) 0%, rgba(255, 255, 255, 0.8) 100%);
         }
         
         .change-positive {
             color: #48bb78;
+            font-weight: 700;
         }
         
         .change-negative {
             color: #f56565;
+            font-weight: 700;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 28px;
+            }
+            
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section {
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -237,12 +393,12 @@
         <div class="content">
             <!-- 晨会级摘要 -->
             <div class="highlight" style="background: #e8f5e9; border-left: 4px solid #4caf50;">
-                🌅 <strong>晨会级摘要：</strong>黄金价格4753.51美元，下降趋势，均线呈混乱排列。RSI 53.1（中性），MACD呈空头形态。信号存疑，置信度55%，建议谨慎。
+                🌅 <strong>晨会级摘要：</strong>黄金价格4853.57美元，震荡趋势，均线呈混乱排列。RSI 54.2（中性），MACD呈多头形态。信号存疑，置信度60%，建议谨慎。
             </div>
             
             <!-- 核心判断 -->
             <div class="highlight">
-                📊 今日核心判断：黄金回调至4753.51，需观察支撑是否有效。
+                📊 今日核心判断：黄金于4853.57附近震荡，方向尚不明确。
             </div>
             
             <!-- 趋势判断 -->
@@ -252,7 +408,7 @@
                     <div class="data-grid">
                         <div class="data-item">
                             <div class="data-label">整体趋势</div>
-                            <div class="data-value" style="font-size: 16px;">下降</div>
+                            <div class="data-value" style="font-size: 16px;">震荡</div>
                         </div>
                         <div class="data-item">
                             <div class="data-label">均线形态</div>
@@ -260,11 +416,11 @@
                         </div>
                         <div class="data-item">
                             <div class="data-label">RSI状态</div>
-                            <div class="data-value" style="font-size: 14px;">53.1 - 中性</div>
+                            <div class="data-value" style="font-size: 14px;">54.2 - 中性</div>
                         </div>
                         <div class="data-item">
                             <div class="data-label">MACD状态</div>
-                            <div class="data-value" style="font-size: 14px;">空头 (柱状:-9.17)</div>
+                            <div class="data-value" style="font-size: 14px;">多头 (柱状:1.52)</div>
                         </div>
                     </div>
                 </div>
@@ -278,16 +434,16 @@
                         <div style="background: white; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
                             <strong style="color: #667eea;">移动平均线</strong>
                             <div style="margin-top: 8px; font-size: 13px;">
-                                MA5: 4816.08<br>
-                                MA10: 4833.48<br>
-                                MA20: 4821.99<br>
+                                MA5: 4836.59<br>
+                                MA10: 4837.95<br>
+                                MA20: 4811.83<br>
                                 排列: 混乱排列
                             </div>
                         </div>
                         <div style="background: white; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
                             <strong style="color: #667eea;">RSI指标</strong>
                             <div style="margin-top: 8px; font-size: 13px;">
-                                数值: 53.09<br>
+                                数值: 54.22<br>
                                 状态: 中性<br>
                                 <em style="color: #718096;">中性区间，无明确信号</em>
                             </div>
@@ -295,18 +451,18 @@
                         <div style="background: white; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
                             <strong style="color: #667eea;">MACD指标</strong>
                             <div style="margin-top: 8px; font-size: 13px;">
-                                MACD: 18.821<br>
-                                信号线: 27.989<br>
-                                柱状图: -9.167<br>
-                                状态: 空头
+                                MACD: 25.534<br>
+                                信号线: 24.019<br>
+                                柱状图: 1.516<br>
+                                状态: 多头
                             </div>
                         </div>
                         <div style="background: white; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
                             <strong style="color: #667eea;">动能与波动</strong>
                             <div style="margin-top: 8px; font-size: 13px;">
                                 动能: 负弱<br>
-                                波动率: 高<br>
-                                ATR: 117.21
+                                波动率: 正常<br>
+                                ATR: 90.09
                             </div>
                         </div>
                     </div>
@@ -318,7 +474,7 @@
                 <div class="section-title">每日盘面点评</div>
                 <div class="section-content">
                     <ul class="condition-list">
-                        <li>日内波动较大，涨跌幅达-2.10%</li><li>成交量放大72.1%，量价背离</li><li>价格位于接近区间低点</li><li>市场方向不明，等待突破</li>
+                        <li>日内波动平稳，涨跌幅-0.18%</li><li>价格位于接近区间高点</li><li>市场方向不明，等待突破</li>
                     </ul>
                 </div>
             </div>
@@ -331,25 +487,25 @@
                         <div class="data-item">
                             <div class="data-label">收盘价</div>
                             <div class="data-value" style="font-size: 14px;">
-                                昨: $4855.67<br>
-                                今: $4753.51<br>
-                                <span class="change-negative">-2.10%</span>
+                                昨: $4862.21<br>
+                                今: $4853.57<br>
+                                <span class="change-negative">-0.18%</span>
                             </div>
                         </div>
                         <div class="data-item">
                             <div class="data-label">成交量</div>
                             <div class="data-value" style="font-size: 14px;">
-                                昨: 114,601<br>
-                                今: 197,281<br>
-                                +72.1%
+                                昨: 121,978<br>
+                                今: 114,447<br>
+                                -6.2%
                             </div>
                         </div>
                         <div class="data-item">
                             <div class="data-label">日内波幅</div>
                             <div class="data-value" style="font-size: 14px;">
-                                高: $4828.37<br>
-                                低: $4676.93<br>
-                                幅: $151.44 (3.24%)
+                                高: $4903.32<br>
+                                低: $4816.99<br>
+                                幅: $86.33 (1.79%)
                             </div>
                         </div>
                     </div>
@@ -360,7 +516,7 @@
             <div class="section">
                 <div class="section-title">近五日趋势叙事</div>
                 <div class="section-content">
-                    <p>近五日黄金价格区间4676.93-4915.34美元，整体呈震荡整理，涨跌幅-1.58%。期间出现反复，方向不够明确。</p>
+                    <p>近五日黄金价格区间4752.71-4903.32美元，整体呈震荡整理，涨跌幅+0.05%。期间出现反复，方向不够明确。</p>
                 </div>
             </div>
             
@@ -373,12 +529,12 @@
                     <div class="data-grid">
                         <div class="data-item">
                             <div class="data-label">最新收盘</div>
-                            <div class="data-value">$4753.51</div>
+                            <div class="data-value">$4853.57</div>
                         </div>
                         <div class="data-item">
                             <div class="data-label">日内涨跌</div>
                             <div class="data-value change-negative">
-                                -2.10%
+                                -0.18%
                             </div>
                         </div>
                         <div class="data-item">
@@ -387,7 +543,7 @@
                         </div>
                         <div class="data-item">
                             <div class="data-label">波动状态</div>
-                            <div class="data-value" style="font-size: 14px;">高</div>
+                            <div class="data-value" style="font-size: 14px;">正常</div>
                         </div>
                     </div>
                 </div>
@@ -400,21 +556,21 @@
                     <div class="scenario bullish">
                         <div class="scenario-title">✓ 顺趋势情景</div>
                         <ul class="condition-list">
-                            <li>价格压制于MA5（4816.08）下方且创新低</li><li>反弹无力，动能保持负向</li>
+                            <li>区间高点接近区间高点附近做空</li><li>区间低点附近做多</li>
                         </ul>
                     </div>
                     
                     <div class="scenario neutral">
                         <div class="scenario-title">◐ 观望情景</div>
                         <ul class="condition-list">
-                            <li>价格在MA5与MA10（4833.48）之间整理</li><li>下跌动能衰竭但尚未突破</li>
+                            <li>价格位于区间中部，无明确方向</li><li>等待放量突破或跌破</li>
                         </ul>
                     </div>
                     
                     <div class="scenario bearish">
                         <div class="scenario-title">✗ 结构失效情景</div>
                         <ul class="condition-list">
-                            <li>有效突破MA10（4833.48），对应约4950.69</li><li>连续两日收盘高于短期均线</li>
+                            <li>放量突破近期震荡区间</li><li>均线开始发散，形成新趋势</li>
                         </ul>
                     </div>
                 </div>
@@ -427,13 +583,13 @@
                     <div style="margin-bottom: 15px;">
                         <strong>主要风险：</strong>
                         <ul class="risk-list">
-                            <li>波动率处于高位，止损空间需相应扩大</li><li>均线混乱，假突破风险增加</li><li>动能偏弱，趋势延续性存疑</li><li>需关注美元指数、美债收益率等宏观因子</li><li>地缘政治事件可能引发剧烈波动</li>
+                            <li>均线混乱，假突破风险增加</li><li>动能偏弱，趋势延续性存疑</li><li>需关注美元指数、美债收益率等宏观因子</li><li>地缘政治事件可能引发剧烈波动</li>
                         </ul>
                     </div>
                     <div>
                         <strong>判断失效点：</strong>
                         <ul class="risk-list">
-                            <li>空头判断失效点：有效突破MA10（4833.48）</li>
+                            <li>震荡判断失效点：突破区间边界并持续运行</li>
                         </ul>
                     </div>
                 </div>
@@ -446,13 +602,13 @@
                     <div class="scenario bullish" style="margin-bottom: 15px;">
                         <div class="scenario-title">🔴 多头失效临界点</div>
                         <ul class="condition-list">
-                            <li>有效跌破MA10（4833.48）</li><li>连续两日收盘低于MA20（4821.99）</li>
+                            <li>有效跌破MA10（4837.95）</li><li>连续两日收盘低于MA20（4811.83）</li><li>MACD死叉向下</li>
                         </ul>
                     </div>
                     <div class="scenario bearish">
                         <div class="scenario-title">🟢 空头失效临界点</div>
                         <ul class="condition-list">
-                            <li>有效突破MA10（4833.48）</li><li>连续两日收盘高于MA20（4821.99）</li><li>MACD金叉向上</li>
+                            <li>有效突破MA10（4837.95）</li><li>连续两日收盘高于MA20（4811.83）</li>
                         </ul>
                     </div>
                 </div>
@@ -463,11 +619,11 @@
                 <div class="section-title">置信度评分与参与强度</div>
                 <div class="section-content">
                     <div class="confidence-bar">
-                        <div class="confidence-fill" style="width: 55%;">
-                            置信度 55%
+                        <div class="confidence-fill" style="width: 60%;">
+                            置信度 60%
                         </div>
                     </div>
-                    <p style="margin-top: 10px;">谨慎参与 - 信号有效性一般，降低仓位规模</p>
+                    <p style="margin-top: 10px;">正常参与 - 趋势成立，按常规仓位操作</p>
                 </div>
             </div>
             
