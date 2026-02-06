@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-黄金盘前计划生成器
-Gold Pre-Market Planning Generator
+点点的金价分析
+Diandian's Gold Price Analysis
 """
 
 import json
@@ -755,7 +755,7 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>黄金盘前计划 - {timestamp.strftime('%Y年%m月%d日')}</title>
+    <title>点点的金价分析 - {timestamp.strftime('%Y年%m月%d日')}</title>
     <style>
         * {{
             margin: 0;
@@ -982,7 +982,7 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
 <body>
     <div class="container">
         <div class="header">
-            <h1>黄金（GC=F）盘前计划</h1>
+            <h1>点点的金价分析</h1>
             <div class="date">{timestamp.strftime('%Y年%m月%d日')} 生成</div>
         </div>
         
@@ -1246,8 +1246,8 @@ def main():
     Main function
     """
     print("=" * 60)
-    print("黄金盘前计划生成器")
-    print("Gold Pre-Market Planning Generator")
+    print("点点的金价分析")
+    print("Diandian's Gold Price Analysis")
     print(f"当前时间: {datetime.now().strftime('%Y年%m月%d日 %H:%M:%S')}")
     print("=" * 60)
     print()
