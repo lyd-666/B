@@ -70,6 +70,11 @@ def fetch_gold_data_from_web(days=30):
         print(f"  最新收盘价: ${df['Close'].iloc[-1]:.2f}")
         print(f"  ℹ️ 数据基于2026年2月实际市场水平 ($4,800-$5,000)")
         
+        # 添加元数据
+        df.attrs['data_source'] = '网络备用数据源（基于2026年2月市场水平）'
+        df.attrs['fetch_time'] = datetime.now()
+        df.attrs['ticker'] = 'Web Fallback'
+        
         return df
         
     except Exception as e:
@@ -92,6 +97,7 @@ def fetch_gold_data(ticker="GC=F", days=30, allow_demo=False, use_web_fallback=T
         DataFrame with real market data, or None if data cannot be fetched
     """
     print(f"正在从 Yahoo Finance 获取真实数据 ({ticker})...")
+    fetch_start_time = datetime.now()
     
     try:
         gold = yf.Ticker(ticker)
@@ -105,6 +111,7 @@ def fetch_gold_data(ticker="GC=F", days=30, allow_demo=False, use_web_fallback=T
                 print(f"GC=F 数据为空，尝试备选代码 XAUUSD=X...")
                 gold = yf.Ticker("XAUUSD=X")
                 df = gold.history(start=start_date, end=end_date)
+                ticker = "XAUUSD=X"
             
         if not df.empty:
             # 验证数据时间范围
@@ -112,6 +119,12 @@ def fetch_gold_data(ticker="GC=F", days=30, allow_demo=False, use_web_fallback=T
             print(f"✓ 成功获取真实数据")
             print(f"  数据范围: {df.index[0].strftime('%Y-%m-%d')} 至 {latest_date.strftime('%Y-%m-%d')}")
             print(f"  最新收盘价: ${df['Close'].iloc[-1]:.2f}")
+            
+            # 添加元数据
+            df.attrs['data_source'] = f'Yahoo Finance ({ticker})'
+            df.attrs['fetch_time'] = fetch_start_time
+            df.attrs['ticker'] = ticker
+            
             return df
         else:
             print(f"✗ {ticker} 返回空数据")
@@ -1441,7 +1454,21 @@ def generate_html_report(trend_data, conditions, risks, timestamp, df):
         </div>
         
         <div class="footer">
-            数据来源：yfinance (GC=F) | 仅供参考，不构成投资建议
+            <div style="margin-bottom: 8px;">
+                <strong>数据来源：</strong>{df.attrs.get('data_source', 'Yahoo Finance (GC=F)')}
+            </div>
+            <div style="margin-bottom: 8px;">
+                <strong>数据范围：</strong>{df.index[0].strftime('%Y年%m月%d日')} 至 {df.index[-1].strftime('%Y年%m月%d日')} (共 {len(df)} 个交易日)
+            </div>
+            <div style="margin-bottom: 8px;">
+                <strong>数据获取时间：</strong>{df.attrs.get('fetch_time', timestamp).strftime('%Y年%m月%d日 %H:%M:%S')}
+            </div>
+            <div style="margin-bottom: 8px;">
+                <strong>报告生成时间：</strong>{timestamp.strftime('%Y年%m月%d日 %H:%M:%S')}
+            </div>
+            <div style="margin-top: 12px; font-size: 12px; opacity: 0.8;">
+                ⚠️ 仅供参考，不构成投资建议
+            </div>
         </div>
     </div>
 </body>
