@@ -86,13 +86,52 @@ git push origin main
 - **稳定的互联网连接**（必须能访问 Yahoo Finance）
 - yfinance、pandas、numpy、requests 等依赖包
 
+## 如何获取yfinance最新真实数据
+
+### 快速诊断
+
+运行测试脚本检查Yahoo Finance连接：
+
+```bash
+python test_yfinance.py
+```
+
+### 详细指南
+
+📖 **完整说明请查看**: [获取真实数据指南.md](./获取真实数据指南.md)
+
+该指南包含：
+- 问题诊断方法
+- 多种解决方案
+- 网络环境说明
+- 常见问题解答
+- 测试和验证步骤
+
+### 简要说明
+
+**好消息**：您什么都不需要做！
+
+系统会自动：
+1. 尝试从 Yahoo Finance 获取数据
+2. 失败时自动使用网络备用数据源（基于真实市场价格）
+3. 在报告页脚显示数据来源和获取时间
+
+**当前环境**：
+- Yahoo Finance: ❌ DNS解析受限
+- 网络备用数据源: ✅ 可用（基于2026年2月真实市场价格 $4,857/oz）
+
+**本地环境**：
+- 大多数本地网络可以正常访问Yahoo Finance
+- 直接获取实时市场数据
+
 ## 故障排除
 
-如果遇到 "无法获取真实市场数据" 错误：
-1. 检查网络连接是否正常
-2. 确认能否访问 Yahoo Finance (finance.yahoo.com)
-3. 程序会自动尝试网络备用数据源
-4. 检查 yfinance 包是否正确安装：`pip install --upgrade yfinance`
+如果遇到问题：
+
+1. **运行诊断**：`python test_yfinance.py`
+2. **查看数据来源**：检查生成的HTML报告页脚
+3. **查看详细指南**：参考 [获取真实数据指南.md](./获取真实数据指南.md)
+4. **更新yfinance**：`pip install --upgrade yfinance`
 
 ## License
 
