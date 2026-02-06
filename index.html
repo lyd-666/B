@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍄 马里奥的黄金闯关指南 - 2026年02月06日</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+            background: #5C94FC;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #E52521;
+            color: white;
+            padding: 30px 40px;
+            border-bottom: 5px solid #FFDE59;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .header .date {
+            font-size: 16px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+        
+        .content {
+            padding: 40px;
+            background: #FFFEF7;
+        }
+        
+        .core-module {
+            margin-bottom: 30px;
+            padding: 24px;
+            background: #FFDE59;
+            border: 4px solid #D2691E;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .module-number {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background: #E52521;
+            color: white;
+            text-align: center;
+            line-height: 32px;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 16px;
+            margin-right: 12px;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .module-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a2332;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .module-content {
+            color: #2c3e50;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+        
+        .term-explanation {
+            margin: 12px 0;
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #8BC34A;
+        }
+        
+        .technical-term {
+            font-weight: 600;
+            color: #1a2332;
+            margin-bottom: 6px;
+        }
+        
+        .mario-says {
+            background: linear-gradient(135deg, #FFEB3B 0%, #FFC107 100%);
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 3px solid #E52521;
+            margin-top: 8px;
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .trigger-section {
+            background: white;
+            padding: 16px;
+            margin: 12px 0;
+            border-left: 4px solid #8BC34A;
+            border-radius: 8px;
+        }
+        
+        .trigger-title {
+            font-weight: 700;
+            color: #1a2332;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .trigger-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .trigger-list li {
+            padding: 6px 0;
+            padding-left: 20px;
+            position: relative;
+            color: #2c3e50;
+        }
+        
+        .trigger-list li::before {
+            content: "•";
+            position: absolute;
+            left: 5px;
+            color: #d4af37;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .risk-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .risk-list li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            color: #2c3e50;
+        }
+        
+        .risk-list li::before {
+            content: "▸";
+            position: absolute;
+            left: 5px;
+            color: #d4af37;
+            font-weight: bold;
+        }
+        
+        .confidence-bar {
+            width: 100%;
+            height: 32px;
+            background: #e1e4e8;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 12px 0;
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1a2332 0%, #2c3e50 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .discipline-box {
+            background: #1a2332;
+            color: white;
+            padding: 20px 24px;
+            border-left: 4px solid #d4af37;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 30px;
+        }
+        
+        .footer {
+            text-align: left;
+            padding: 30px 40px;
+            color: #6c757d;
+            font-size: 13px;
+            border-top: 1px solid #e1e4e8;
+            background: #f8f9fa;
+            line-height: 1.8;
+        }
+        
+        .footer-item {
+            margin-bottom: 6px;
+        }
+        
+        .footer-label {
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px 24px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .content {
+                padding: 24px;
+            }
+            
+            .core-module {
+                padding: 20px;
+            }
+            
+            .footer {
+                padding: 20px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍄 马里奥的黄金闯关指南 🌟</h1>
+            <div class="date">2026年02月06日</div>
+        </div>
+        
+        <div class="content">
+            <!-- ① 今日核心判断 -->
+            <div class="core-module">
+                <div class="module-title">
+                    <span class="module-number">①</span>
+                    今日核心判断
+                </div>
+                <div class="module-content">
+                    💬 马里奥的判断：黄金短期反弹至4906.54，但结构尚未转强。
+                    
+                    
+    <div class="term-explanation">
+        <div class="technical-term">📊 最新价格：$4906.54</div>
+        <div class="mario-says">🍄 马里奥说：就是现在金子值多少钱1克，约合人民币1104元</div>
+    </div>
+    
+                </div>
+            </div>
+            
+            <!-- ② 今日趋势框架是否有效 -->
+            <div class="core-module">
+                <div class="module-title">
+                    <span class="module-number">②</span>
+                    今日趋势框架是否有效
+                </div>
+                <div class="module-content">
+                    无明确框架 - 均线混乱，处于方向选择阶段。
+                    
+                    
+    <div class="term-explanation">
+        <div class="technical-term">📊 MA5（5日均线）: $4856.40</div>
+        <div class="mario-says">🍄 马里奥说：就像最近5天的平均成绩，看看黄金最近表现如何</div>
+    </div>
+    
+                    
+                    
+    <div class="term-explanation">
+        <div class="technical-term">📊 MA10（10日均线）: $4849.18</div>
+        <div class="mario-says">🍄 马里奥说：最近10天的平均分数，帮我们看清大方向</div>
+    </div>
+    
+                    
+                    
+    <div class="term-explanation">
+        <div class="technical-term">📊 MA20（20日均线）: $4849.93</div>
+        <div class="mario-says">🍄 马里奥说：最近20天的趋势，像一个月的总体评价</div>
+    </div>
+    
+                    
+                    
+    <div class="term-explanation">
+        <div class="technical-term">📊 RSI指标: 49.9</div>
+        <div class="mario-says">🍄 马里奥说：这个数字告诉你金子是太抢手（>70超买）还是没人要（<30超卖），现在49.9正常</div>
+    </div>
+    
+                    
+                    
+    <div class="term-explanation">
+        <div class="technical-term">📊 均线排列：混乱排列</div>
+        <div class="mario-says">🍄 马里奥说：上上下下，方向不明</div>
+    </div>
+    
+                </div>
+            </div>
+            
+            <!-- ③ 盘中关键触发条件 -->
+            <div class="core-module">
+                <div class="module-title">
+                    <span class="module-number">③</span>
+                    盘中关键触发条件
+                </div>
+                <div class="module-content">
+                    <div class="trigger-section">
+                        <div class="trigger-title">🌟 顺趋势情景</div>
+                        <ul class="trigger-list">
+                            <li>价格守住MA5（4856.40）上方且创新高</li><li>成交量配合放大，动能保持正向</li>
+                        </ul>
+                        <div class="mario-says">
+                            🎮 马里奥说：这些情况出现了，就像找到了正确的路，可以继续前进！
+                        </div>
+                    </div>
+                    
+                    <div class="trigger-section">
+                        <div class="trigger-title">🌟 观望情景</div>
+                        <ul class="trigger-list">
+                            <li>价格在MA5与MA10（4849.18）之间震荡</li><li>波动收窄，等待方向选择</li>
+                        </ul>
+                        <div class="mario-says">
+                            🍄 马里奥说：这时候像在两个平台之间晃悠，先别急着跳，等等看！
+                        </div>
+                    </div>
+                    
+                    <div class="trigger-section">
+                        <div class="trigger-title">🌟 结构失效情景</div>
+                        <ul class="trigger-list">
+                            <li>有效跌破MA10（4849.18），对应约4757.82</li><li>连续两日收盘低于短期均线</li>
+                        </ul>
+                        <div class="mario-says">
+                            🔥 马里奥说：如果突破了"安全线"，那计划就失效了，要立刻调整策略，就像撞到刺猬要重新开始！
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ④ 主要风险与判断失效点 -->
+            <div class="core-module">
+                <div class="module-title">
+                    <span class="module-number">④</span>
+                    主要风险与判断失效点
+                </div>
+                <div class="module-content">
+                    <div style="margin-bottom: 20px;">
+                        <strong style="color: #1a2332;">🔥 主要风险：</strong>
+                        <ul class="risk-list">
+                            <li>波动率处于高位，止损空间需相应扩大</li><li>均线混乱，假突破风险增加</li><li>动能偏弱，趋势延续性存疑</li><li>需关注美元指数、美债收益率等宏观因子</li><li>地缘政治事件可能引发剧烈波动</li>
+                        </ul>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <strong style="color: #1a2332;">🧱 判断失效点：</strong>
+                        <ul class="risk-list">
+                            <li>多头判断失效点：有效跌破MA10（4849.18）</li>
+                        </ul>
+                    </div>
+                    
+                    
+    <div class="term-explanation">
+        <div class="technical-term">📊 风险控制</div>
+        <div class="mario-says">🍄 马里奥说：投资就像闯关，一定要设好'重启点'（止损位），掉坑里了就立刻重来，保护好你的金币（本金）！</div>
+    </div>
+    
+                    
+                    
+    <div class="term-explanation">
+        <div class="technical-term">📊 失效点</div>
+        <div class="mario-says">🍄 马里奥说：就像通关时的生命线，一旦跌破这个位置，说明我们判断错了，要赶紧调整，不能硬撑！</div>
+    </div>
+    
+                </div>
+            </div>
+            
+            <!-- ⑤ 今日参与强度 -->
+            <div class="core-module">
+                <div class="module-title">
+                    <span class="module-number">⑤</span>
+                    今日参与强度
+                </div>
+                <div class="module-content">
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: 55%; background: linear-gradient(90deg, #E52521 0%, #F39C12 100%);">
+                            🏆 置信度 55%
+                        </div>
+                    </div>
+                    <p style="margin-top: 12px;">谨慎参与 - 信号有效性一般，降低仓位规模</p>
+                    
+                    
+    <div class="term-explanation">
+        <div class="technical-term">📊 置信度 55%</div>
+        <div class="mario-says">🍄 马里奥说：我们有55%的信心，就像通关的把握！信心一般，稳着点</div>
+    </div>
+    
+                    
+                    
+    <div class="term-explanation">
+        <div class="technical-term">📊 仓位建议</div>
+        <div class="mario-says">🍄 马里奥说：建议用40-60%的金币参与，记住永远留点保命的！输了可以再赚，本金没了就game over了</div>
+    </div>
+    
+                </div>
+            </div>
+            
+            <!-- ⑥ 一句话盘前纪律 -->
+            <div class="core-module">
+                <div class="module-title">
+                    <span class="module-number">⑥</span>
+                    一句话盘前纪律
+                </div>
+                <div class="module-content">
+                    <div class="discipline-box" style="background: #FFEB3B; padding: 16px; border-radius: 8px; border: 3px solid #E52521; font-size: 16px; font-weight: 600; text-align: center;">
+                        ⚡ 严格止损，保护本金。
+                    </div>
+                    
+                    <div class="mario-says" style="margin-top: 16px;">
+                        💬 马里奥说：游戏里要保护生命值，投资也要保护本金！不要贪心，安全第一！记住：金币可以再赚，但本金没了就真的game over了！🍄
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 🎮 马里奥的互动顾问 -->
+        <div class="mario-advisor" style="background: linear-gradient(135deg, #FFDE59 0%, #FFC107 100%); border: 5px solid #D2691E; border-radius: 20px; padding: 30px; margin: 30px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <h2 style="color: #E52521; font-size: 28px; margin-bottom: 20px; text-align: center;">
+                🎮 马里奥帮你分析持仓 🌟
+            </h2>
+            <p style="text-align: center; color: #666; margin-bottom: 20px;">
+                输入你的买入价格，马里奥会根据技术指标给你专业建议！
+            </p>
+            
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+                <div style="width: 100%; max-width: 400px;">
+                    <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">
+                        💰 您的买入价格（元/克）：
+                    </label>
+                    <input 
+                        type="number" 
+                        id="userPrice" 
+                        placeholder="例如: 1050"
+                        style="width: 100%; padding: 12px; font-size: 18px; border: 3px solid #8BC34A; border-radius: 10px; background: white; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);"
+                    >
+                </div>
+                
+                <button 
+                    onclick="analyzeMarioAdvice()" 
+                    style="background: linear-gradient(135deg, #E52521 0%, #C62828 100%); color: white; font-size: 20px; font-weight: 600; padding: 15px 40px; border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: transform 0.2s;"
+                    onmouseover="this.style.transform='scale(1.05)'"
+                    onmouseout="this.style.transform='scale(1)'"
+                >
+                    🍄 马里奥帮我分析 🍄
+                </button>
+            </div>
+            
+            <div id="adviceResult" style="margin-top: 30px;"></div>
+        </div>
+        
+        <script>
+        // 从页面数据中提取技术指标
+        const CURRENT_PRICE_PER_GRAM = 1104.24;
+        const RSI_VALUE = 49.9;
+        const TREND_DIRECTION = "上升";
+        const MA_ALIGNMENT = "混乱排列";
+        const CONFIDENCE_SCORE = 55;
+        
+        function analyzeMarioAdvice() {
+            const userPriceInput = document.getElementById('userPrice');
+            const userPrice = parseFloat(userPriceInput.value);
+            
+            // 验证输入
+            if (!userPrice || userPrice <= 0) {
+                document.getElementById('adviceResult').innerHTML = `
+                    <div style="background: #FFEB3B; padding: 20px; border-radius: 12px; border: 3px solid #E52521; text-align: center;">
+                        <p style="font-size: 18px; color: #E52521; font-weight: 600;">
+                            🍄 马里奥说：请输入有效的价格哦！
+                        </p>
+                        <p style="color: #666; margin-top: 10px;">
+                            价格要大于0才能帮你分析呢！
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 计算盈亏
+            const profitAmount = CURRENT_PRICE_PER_GRAM - userPrice;
+            const profitRatio = (profitAmount / userPrice) * 100;
+            
+            // 决策逻辑
+            let adviceType = "";
+            let adviceIcon = "";
+            let adviceColor = "";
+            let adviceText = "";
+            let marioExplanation = "";
+            
+            if (profitRatio > 15 && RSI_VALUE > 70) {
+                adviceType = "建议部分止盈";
+                adviceIcon = "🔴";
+                adviceColor = "#FF5252";
+                adviceText = "你赚得不少了，而且RSI超买，可以考虑先落袋为安！";
+                marioExplanation = `太棒了！你赚了<strong>${profitAmount.toFixed(0)}元/克（+${profitRatio.toFixed(1)}%）</strong>，就像拿到了星星！<br><br>
+                    但要注意：RSI已经${RSI_VALUE.toFixed(1)}（超买>70），市场可能过热了。<br><br>
+                    <strong>🎯 马里奥的建议：</strong><br>
+                    • 可以先卖出30-50%锁定利润<br>
+                    • 剩下的继续持有，设置保本止损在${(userPrice*1.05).toFixed(0)}元<br>
+                    • 如果跌破${(CURRENT_PRICE_PER_GRAM*0.95).toFixed(0)}元就要考虑全部出场`;
+            } else if (profitRatio > 5 && TREND_DIRECTION === "上升") {
+                adviceType = "建议继续持有";
+                adviceIcon = "🟢";
+                adviceColor = "#8BC34A";
+                adviceText = "恭喜盈利中！市场趋势向上，可以继续持有！";
+                marioExplanation = `恭喜！你现在赚了<strong>${profitAmount.toFixed(0)}元/克（+${profitRatio.toFixed(1)}%）</strong><br><br>
+                    市场处于${TREND_DIRECTION}趋势，就像马里奥在往上跳台阶！<br>
+                    RSI是${RSI_VALUE.toFixed(1)}，还没过热（<70），说明还有上涨空间。<br><br>
+                    <strong>🎯 马里奥的建议：</strong><br>
+                    • 继续持有，耐心等待更高点位<br>
+                    • 设置止损在${(userPrice*1.02).toFixed(0)}元，保护利润<br>
+                    • 如果涨到${(CURRENT_PRICE_PER_GRAM*1.05).toFixed(0)}元可以考虑部分止盈`;
+            } else if (profitRatio > -3 && profitRatio <= 5) {
+                adviceType = "建议观望等待";
+                adviceIcon = "🟡";
+                adviceColor = "#FFC107";
+                adviceText = "盈亏不大，市场方向不明，先观望比较好！";
+                marioExplanation = `现在${profitRatio >= 0 ? '赚了' : '亏了'}<strong>${Math.abs(profitAmount).toFixed(0)}元/克（${profitRatio >= 0 ? '+' : ''}${profitRatio.toFixed(1)}%）</strong><br><br>
+                    市场现在${TREND_DIRECTION}，方向不够明确，就像马里奥在平地上走。<br>
+                    RSI是${RSI_VALUE.toFixed(1)}（中性区域），没有明确的买卖信号。<br><br>
+                    <strong>🎯 马里奥的建议：</strong><br>
+                    • 先别急着行动，等市场方向明朗<br>
+                    • 如果涨回${(userPrice*1.03).toFixed(0)}元以上可以考虑解套<br>
+                    • 如果跌破${(userPrice*0.95).toFixed(0)}元要小心，考虑止损`;
+            } else if (profitRatio <= -3 && profitRatio > -8 && TREND_DIRECTION === "上升") {
+                adviceType = "可考虑补仓降低成本";
+                adviceIcon = "🟢";
+                adviceColor = "#8BC34A";
+                adviceText = "虽然暂时亏损，但趋势向上，可以考虑补仓！";
+                marioExplanation = `现在亏了<strong>${Math.abs(profitAmount).toFixed(0)}元/克（${profitRatio.toFixed(1)}%）</strong>，但别太担心！<br><br>
+                    市场处于上升趋势，就像马里奥准备跳起来了。<br>
+                    亏损还在可控范围内（<8%），这可能是个补仓的机会。<br><br>
+                    <strong>🎯 马里奥的建议：</strong><br>
+                    • 如果有资金，可以小量补仓，降低平均成本<br>
+                    • 补仓后平均成本约${((userPrice + CURRENT_PRICE_PER_GRAM)/2).toFixed(0)}元<br>
+                    • 设置总仓位止损在${(CURRENT_PRICE_PER_GRAM*0.92).toFixed(0)}元`;
+            } else if (profitRatio <= -8) {
+                adviceType = "建议考虑止损";
+                adviceIcon = "🔴";
+                adviceColor = "#FF5252";
+                adviceText = "亏损较大，要认真考虑止损保护剩余资金！";
+                marioExplanation = `现在亏了<strong>${Math.abs(profitAmount).toFixed(0)}元/克（${profitRatio.toFixed(1)}%）</strong>，这确实不是好消息。<br><br>
+                    亏损已经超过8%，市场趋势是${TREND_DIRECTION}，风险在加大。<br>
+                    就像马里奥掉进坑里，要及时按重启按钮！<br><br>
+                    <strong>🎯 马里奥的建议：</strong><br>
+                    • 认真考虑止损，保护剩余的${((1+profitRatio/100)*100).toFixed(1)}%资金<br>
+                    • 如果反弹到${(userPrice*0.95).toFixed(0)}元可以减仓<br>
+                    • 不要抱着"回本再卖"的想法，避免更大亏损<br>
+                    • 止损后可以等待更好的买入机会`;
+            } else {
+                adviceType = "建议观望";
+                adviceIcon = "🟡";
+                adviceColor = "#FFC107";
+                adviceText = "当前情况不明朗，观望是最好的选择！";
+                marioExplanation = `现在${profitRatio >= 0 ? '赚了' : '亏了'}<strong>${Math.abs(profitAmount).toFixed(0)}元/克（${profitRatio >= 0 ? '+' : ''}${profitRatio.toFixed(1)}%）</strong><br><br>
+                    市场情况比较复杂，没有明确的信号。<br>
+                    就像马里奥在迷宫里，需要耐心观察。<br><br>
+                    <strong>🎯 马里奥的建议：</strong><br>
+                    • 保持观望，等待更明确的信号<br>
+                    • 关注市场变化，随时准备行动<br>
+                    • 设置止损保护在${(userPrice*0.92).toFixed(0)}元`;
+            }
+            
+            // 显示结果
+            document.getElementById('adviceResult').innerHTML = `
+                <div style="background: white; border: 5px solid ${adviceColor}; border-radius: 16px; padding: 25px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <h3 style="color: ${adviceColor}; font-size: 24px; margin-bottom: 10px;">
+                            ${adviceIcon} ${adviceType}
+                        </h3>
+                        <p style="color: #666; font-size: 16px;">
+                            ${adviceText}
+                        </p>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <div style="color: #868e96; font-size: 14px;">您的买入价</div>
+                                <div style="color: #333; font-size: 20px; font-weight: 600;">${userPrice.toFixed(0)} 元/克</div>
+                            </div>
+                            <div>
+                                <div style="color: #868e96; font-size: 14px;">当前价格</div>
+                                <div style="color: #333; font-size: 20px; font-weight: 600;">${CURRENT_PRICE_PER_GRAM.toFixed(0)} 元/克</div>
+                            </div>
+                            <div>
+                                <div style="color: #868e96; font-size: 14px;">盈亏金额</div>
+                                <div style="color: ${profitAmount >= 0 ? '#8BC34A' : '#FF5252'}; font-size: 20px; font-weight: 600;">
+                                    ${profitAmount >= 0 ? '+' : ''}${profitAmount.toFixed(0)} 元/克
+                                </div>
+                            </div>
+                            <div>
+                                <div style="color: #868e96; font-size: 14px;">盈亏比例</div>
+                                <div style="color: ${profitAmount >= 0 ? '#8BC34A' : '#FF5252'}; font-size: 20px; font-weight: 600;">
+                                    ${profitRatio >= 0 ? '+' : ''}${profitRatio.toFixed(1)}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #FFEB3B 0%, #FFC107 100%); padding: 20px; border-radius: 12px; border: 3px solid #E52521;">
+                        <div style="display: flex; align-items: start; gap: 12px;">
+                            <div style="font-size: 32px; flex-shrink: 0;">🍄</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; color: #E52521; margin-bottom: 10px; font-size: 18px;">
+                                    马里奥的详细分析：
+                                </div>
+                                <div style="color: #333; line-height: 1.8; font-size: 15px;">
+                                    ${marioExplanation}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ff9800;">
+                        <div style="font-weight: 600; color: #ff9800; margin-bottom: 8px;">
+                            ⚠️ 风险提示
+                        </div>
+                        <div style="color: #666; font-size: 14px; line-height: 1.6;">
+                            • 本建议基于技术分析，仅供参考<br>
+                            • 市场有风险，投资需谨慎<br>
+                            • 请根据自己的风险承受能力做决策<br>
+                            • 永远不要投入超过你能承受损失的资金
+                        </div>
+                    </div>
+                </div>
+                </div>
+                
+                <!-- 第二个问题区域 -->
+                <div id="questionSection" style="margin-top: 30px; padding: 25px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.3);">
+                    <div style="font-size: 24px; color: white; font-weight: bold; margin-bottom: 20px;">
+                        💭 您愿意接受这个建议吗？
+                    </div>
+                    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="handleAnswer(true)" style="
+                            padding: 15px 40px;
+                            font-size: 18px;
+                            font-weight: bold;
+                            background: linear-gradient(135deg, #8BC34A 0%, #689F38 100%);
+                            color: white;
+                            border: none;
+                            border-radius: 12px;
+                            cursor: pointer;
+                            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                            transition: transform 0.2s, box-shadow 0.2s;
+                        " onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.3)';" 
+                           onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.2)';">
+                            ✅ 是，我接受
+                        </button>
+                        <button onclick="handleAnswer(false)" style="
+                            padding: 15px 40px;
+                            font-size: 18px;
+                            font-weight: bold;
+                            background: linear-gradient(135deg, #FF5252 0%, #D32F2F 100%);
+                            color: white;
+                            border: none;
+                            border-radius: 12px;
+                            cursor: pointer;
+                            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                            transition: transform 0.2s, box-shadow 0.2s;
+                        " onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.3)';" 
+                           onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.2)';">
+                            ❌ 否，我再想想
+                        </button>
+                    </div>
+                    <div style="margin-top: 15px; color: #fff; font-size: 14px; opacity: 0.9;">
+                        💡 点击按钮后，马里奥会引用投资大师的智慧给您最后的建议
+                    </div>
+                </div>
+            `;
+        }
+        
+        // ==========================================
+        // 投资大师智慧功能
+        // ==========================================
+        
+        // 查理·芒格的12条智慧
+        const mungerWisdom = {
+            patience: "投资需要极大的耐心，等待好球再挥棒。不需要对每个球都出手，要等待最好的机会。你现在的情况需要耐心，不要急于追求更多收益。",
+            compounding: "复利是世界第八大奇迹。理解它的人赚取它，不理解的人支付它。长期持有优质资产，让复利为你工作。",
+            avoidMistakes: "避免做傻事比做聪明事更重要。在投资中，不犯大错比做对几次更关键。保护本金，避免重大损失。",
+            abilityCircle: "知道自己的能力圈边界，不要超出去。如果你对某个投资不够了解或不够自信，那就不要参与。",
+            independent: "独立思考是投资者最重要的品质。不要被市场情绪左右，要有自己的判断和坚持。",
+            rational: "理性决策需要克服人性的弱点。贪婪和恐惧是投资的大敌，保持冷静理性至关重要。",
+            fearGreed: "在别人贪婪时恐惧，在别人恐惧时贪婪。当市场疯狂时保持谨慎，当市场恐慌时寻找机会。",
+            longTerm: "短期市场是投票机，长期市场是称重机。不要被短期波动困扰，关注长期价值。",
+            quality: "宁要优秀企业的高价，不要平庸企业的低价。质量比价格更重要，好的投资标的值得耐心等待。",
+            humble: "承认自己的无知是智慧的开始。知之为知之，不知为不知，不懂的东西就不要碰。",
+            learning: "持续学习是投资成功的关键。市场在变化，我们也要不断学习和适应。",
+            simple: "简单往往比复杂更有效。投资不需要高深的数学，需要的是常识和纪律。"
+        };
+        
+        // 乔治·索罗斯的12条智慧
+        const sorosWisdom = {
+            profitLoss: "重要的不是你的判断正确与否，而是正确时赚多少，错误时亏多少。设置好止损，让利润奔跑。",
+            survival: "生存第一，赚钱第二。保护本金永远是最重要的。只要还在场上，就还有机会。",
+            admitError: "承认错误是我们最大的优势。一旦发现判断错误，要果断纠正，不要固执己见。",
+            marketWrong: "市场永远是错的。问题不是市场对错，而是如何在市场的错误中获利。",
+            contrarian: "当每个人都朝一个方向跑时，也许该往相反方向看看。独立思考，不要随大流。",
+            decisive: "最困难的是认清自己的错误，然后果断行动。犹豫不决是投资的大敌。",
+            understand: "投资成功的关键是理解形势的变化。要不断评估市场环境，及时调整策略。",
+            adapt: "适应变化比预测变化更重要。市场在变，策略也要随之调整。",
+            skeptical: "保持怀疑精神。对所有信息都要质疑，包括自己的判断。",
+            inflection: "重要的是识别市场的转折点。趋势的改变往往发生在最不被注意的时候。",
+            risk: "风险管理是投资的核心。要知道最坏的情况是什么，并做好准备。",
+            timing: "耐心等待合适的时机。不要急于行动，要等待最佳的进场和出场时机。"
+        };
+        
+        // 智慧选择函数
+        function selectWisdom(accepted, advice, profitRatio, rsi, trend) {
+            let munger, soros;
+            
+            if (accepted) {
+                // 用户接受建议
+                if (advice.includes('持有') || advice.includes('加仓')) {
+                    // 建议持有或加仓
+                    if (profitRatio > 0 && profitRatio < 10) {
+                        // 小幅盈利
+                        munger = mungerWisdom.patience;
+                        soros = sorosWisdom.profitLoss;
+                    } else if (profitRatio >= 10) {
+                        // 较大盈利
+                        munger = mungerWisdom.compounding;
+                        soros = sorosWisdom.profitLoss;
+                    } else if (profitRatio < 0 && profitRatio > -5) {
+                        // 小幅亏损
+                        munger = mungerWisdom.patience;
+                        soros = sorosWisdom.survival;
+                    } else {
+                        // 较大亏损
+                        munger = mungerWisdom.avoidMistakes;
+                        soros = sorosWisdom.admitError;
+                    }
+                } else if (advice.includes('减仓') || advice.includes('止损')) {
+                    // 建议减仓或止损
+                    if (profitRatio > 15) {
+                        // 大幅盈利，止盈
+                        munger = mungerWisdom.rational;
+                        soros = sorosWisdom.profitLoss;
+                    } else {
+                        // 亏损止损
+                        munger = mungerWisdom.avoidMistakes;
+                        soros = sorosWisdom.survival;
+                    }
+                } else {
+                    // 观望
+                    munger = mungerWisdom.patience;
+                    soros = sorosWisdom.timing;
+                }
+            } else {
+                // 用户不接受建议
+                munger = mungerWisdom.independent;
+                soros = sorosWisdom.skeptical;
+            }
+            
+            return { munger, soros };
+        }
+        
+        // 处理用户回答
+        function handleAnswer(accepted) {
+            const userPrice = parseFloat(document.getElementById('userPrice').value);
+            if (!userPrice || userPrice <= 0) {
+                alert('🍄 请先输入价格并点击"马里奥帮我分析"！');
+                return;
+            }
+            
+            // 获取当前分析数据
+            const currentPrice = 1104.24;
+            const profitAmount = currentPrice - userPrice;
+            const profitRatio = (profitAmount / userPrice) * 100;
+            const rsi = 49.9;
+            const trend = "上升";
+            const advice = document.getElementById('adviceResult').querySelector('h3').innerText;
+            
+            // 选择智慧
+            const wisdom = selectWisdom(accepted, advice, profitRatio, rsi, trend);
+            
+            // 生成最后告知
+            let finalAdvice = generateFinalAdvice(accepted, profitRatio, advice, currentPrice, userPrice);
+            
+            // 显示结果
+            displayWisdomResult(accepted, wisdom, finalAdvice);
+        }
+        
+        // 生成最后告知
+        function generateFinalAdvice(accepted, profitRatio, advice, currentPrice, userPrice) {
+            let stopLoss, takeProfit1, takeProfit2;
+            
+            if (profitRatio > 0) {
+                // 盈利状态
+                stopLoss = (userPrice * 0.98).toFixed(0);
+                takeProfit1 = (currentPrice * 1.03).toFixed(0);
+                takeProfit2 = (currentPrice * 1.06).toFixed(0);
+            } else {
+                // 亏损状态  
+                stopLoss = (currentPrice * 0.97).toFixed(0);
+                takeProfit1 = userPrice;
+                takeProfit2 = (userPrice * 1.03).toFixed(0);
+            }
+            
+            let positionAdvice, riskPoints;
+            
+            if (accepted) {
+                if (advice.includes('持有') || advice.includes('加仓')) {
+                    positionAdvice = `
+                        <strong>当前仓位：</strong>保持100%<br>
+                        <strong>涨到${takeProfit1}元：</strong>可减仓30%，锁定部分利润<br>
+                        <strong>涨到${takeProfit2}元：</strong>再减仓40%，保留30%长期持有<br>
+                        <strong>回落到${stopLoss}元：</strong>必须全部止损出场
+                    `;
+                    riskPoints = `
+                        • 如果跌破${stopLoss}元必须止损，不要犹豫<br>
+                        • 不要贪心，分批获利是智慧之举<br>
+                        • 保持纪律，严格执行计划<br>
+                        • 时刻记住：保护本金第一
+                    `;
+                } else if (advice.includes('减仓')) {
+                    positionAdvice = `
+                        <strong>建议减仓：</strong>先卖出30-50%<br>
+                        <strong>剩余仓位：</strong>设置保本止损在${stopLoss}元<br>
+                        <strong>如果回调到${Math.round(currentPrice * 0.95)}元：</strong>考虑再减仓<br>
+                        <strong>长期持仓：</strong>保留20-30%观察
+                    `;
+                    riskPoints = `
+                        • 利润要及时锁定，不要全部回吐<br>
+                        • 保护已获得的收益很重要<br>
+                        • 不要因为舍不得而错过止盈机会<br>
+                        • 记住：落袋为安
+                    `;
+                } else {
+                    positionAdvice = `
+                        <strong>当前：</strong>保持观望<br>
+                        <strong>如果涨到${takeProfit1}元：</strong>可以考虑适度加仓<br>
+                        <strong>如果跌到${stopLoss}元：</strong>考虑止损<br>
+                        <strong>建议：</strong>等待更明确的信号
+                    `;
+                    riskPoints = `
+                        • 方向不明时，观望是最好的策略<br>
+                        • 不要被短期波动左右<br>
+                        • 耐心等待合适的机会<br>
+                        • 保持冷静，不要冲动交易
+                    `;
+                }
+            } else {
+                // 用户不接受建议
+                positionAdvice = `
+                    <strong>尊重您的判断！</strong>但请注意：<br>
+                    <strong>设置警报：</strong>价格突破${takeProfit1}元或跌破${stopLoss}元时重新评估<br>
+                    <strong>保持关注：</strong>市场变化可能改变原有判断<br>
+                    <strong>灵活调整：</strong>及时修正错误也是一种智慧
+                `;
+                riskPoints = `
+                    • 独立思考很好，但也要保持开放的心态<br>
+                    • 随时准备承认错误并调整策略<br>
+                    • 设置好止损保护自己<br>
+                    • 市场变化快，要灵活应对
+                `;
+            }
+            
+            return { positionAdvice, riskPoints, stopLoss, takeProfit1, takeProfit2 };
+        }
+        
+        // 显示智慧结果
+        function displayWisdomResult(accepted, wisdom, finalAdvice) {
+            const resultHtml = `
+                <div style="margin-top: 30px; padding: 25px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                    <h2 style="color: #fff; text-align: center; margin-bottom: 25px; font-size: 24px;">
+                        🎓 投资大师的智慧
+                    </h2>
+                    
+                    <div style="background: rgba(255,255,255,0.95); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                        <div style="color: #333; margin-bottom: 15px; font-size: 16px;">
+                            🍄 <strong>马里奥：</strong>${accepted ? '太好了！您愿意接受建议！' : '理解您的顾虑，独立思考很重要！'}<br>
+                            让我们听听两位传奇投资大师怎么说：
+                        </div>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); padding: 20px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                        <div style="color: #fff; font-size: 18px; font-weight: bold; margin-bottom: 12px;">
+                            📚 查理·芒格的智慧
+                        </div>
+                        <div style="color: #fff; line-height: 1.8; font-size: 15px; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px;">
+                            "${wisdom.munger}"
+                        </div>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); padding: 20px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                        <div style="color: #fff; font-size: 18px; font-weight: bold; margin-bottom: 12px;">
+                            💰 乔治·索罗斯的智慧
+                        </div>
+                        <div style="color: #fff; line-height: 1.8; font-size: 15px; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px;">
+                            "${wisdom.soros}"
+                        </div>
+                    </div>
+                    
+                    <div style="background: #FFDE59; padding: 20px; border-radius: 12px; border: 4px solid #D2691E; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                        <div style="color: #333; font-size: 18px; font-weight: bold; margin-bottom: 15px;">
+                            🍄 马里奥的最后告知
+                        </div>
+                        
+                        <div style="background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                            <div style="font-weight: bold; color: #E52521; margin-bottom: 10px; font-size: 16px;">
+                                ✅ 具体执行计划：
+                            </div>
+                            <div style="color: #555; line-height: 1.8; font-size: 14px;">
+                                ${finalAdvice.positionAdvice}
+                            </div>
+                        </div>
+                        
+                        <div style="background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                            <div style="font-weight: bold; color: #E52521; margin-bottom: 10px; font-size: 16px;">
+                                🎯 关键价格点位：
+                            </div>
+                            <div style="color: #555; line-height: 1.8; font-size: 14px;">
+                                <strong>严格止损：</strong>${finalAdvice.stopLoss}元（必须执行）<br>
+                                <strong>首次止盈：</strong>${finalAdvice.takeProfit1}元（部分获利）<br>
+                                <strong>最终目标：</strong>${finalAdvice.takeProfit2}元（剩余仓位）
+                            </div>
+                        </div>
+                        
+                        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ff9800;">
+                            <div style="font-weight: bold; color: #ff9800; margin-bottom: 10px; font-size: 16px;">
+                                ⚠️ 风险控制要点：
+                            </div>
+                            <div style="color: #666; line-height: 1.8; font-size: 14px;">
+                                ${finalAdvice.riskPoints}
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; text-align: center;">
+                            <div style="color: #fff; font-size: 16px; font-weight: bold;">
+                                💎 大师智慧精华
+                            </div>
+                            <div style="color: #fff; font-size: 14px; margin-top: 8px; line-height: 1.6;">
+                                芒格教我们：${accepted ? '耐心和纪律是投资成功的关键' : '独立思考，但要保持开放'}<br>
+                                索罗斯教我们：${accepted ? '严格止损，让利润奔跑' : '灵活调整，及时纠错'}
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 15px; text-align: center; color: #333; font-size: 15px; font-weight: bold;">
+                            🏃‍♂️ 记住：投资是马拉松，不是短跑！
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // 显示结果
+            document.getElementById('adviceResult').insertAdjacentHTML('beforeend', resultHtml);
+            
+            // 隐藏问题按钮
+            document.getElementById('questionSection').style.display = 'none';
+        }
+        </script>
+        
+        <div class="footer">
+            <div class="footer-item">
+                <span class="footer-label">数据来源：</span>网络备用数据源（基于2026年2月市场水平）
+            </div>
+            <div class="footer-item">
+                <span class="footer-label">数据范围：</span>2025年02月07日 至 2026年02月06日 (共 365 个交易日)
+            </div>
+            <div class="footer-item">
+                <span class="footer-label">数据获取时间：</span>2026年02月06日 17:01:00
+            </div>
+            <div class="footer-item">
+                <span class="footer-label">报告生成时间：</span>2026年02月06日 17:01:00
+            </div>
+            <div style="margin-top: 16px; font-size: 12px; color: #868e96;">
+                免责声明：本报告仅供参考，不构成投资建议
+            </div>
+        </div>
+    </div>
+</body>
+</html>
