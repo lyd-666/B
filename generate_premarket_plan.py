@@ -11,11 +11,21 @@ import numpy as np
 from datetime import datetime, timedelta
 
 
-def fetch_gold_data(ticker="GC=F", days=30):
+def fetch_gold_data(ticker="GC=F", days=30, allow_demo=False):
     """
-    获取黄金价格数据
-    Fetch gold price data from yfinance
+    获取黄金价格数据（仅使用真实数据）
+    Fetch gold price data from yfinance (real data only)
+    
+    Args:
+        ticker: 数据代码 (GC=F for futures, XAUUSD=X for spot)
+        days: 获取天数
+        allow_demo: 是否允许演示模式（默认False，仅使用真实数据）
+    
+    Returns:
+        DataFrame with real market data, or None if data cannot be fetched
     """
+    print(f"正在从 Yahoo Finance 获取真实数据 ({ticker})...")
+    
     try:
         gold = yf.Ticker(ticker)
         end_date = datetime.now()
@@ -24,21 +34,40 @@ def fetch_gold_data(ticker="GC=F", days=30):
         
         if df.empty:
             # 尝试备选代码
-            print(f"尝试备选代码 XAUUSD=X...")
-            gold = yf.Ticker("XAUUSD=X")
-            df = gold.history(start=start_date, end=end_date)
-        
-        return df
+            if ticker == "GC=F":
+                print(f"GC=F 数据为空，尝试备选代码 XAUUSD=X...")
+                gold = yf.Ticker("XAUUSD=X")
+                df = gold.history(start=start_date, end=end_date)
+            
+        if not df.empty:
+            # 验证数据时间范围
+            latest_date = df.index[-1]
+            print(f"✓ 成功获取真实数据")
+            print(f"  数据范围: {df.index[0].strftime('%Y-%m-%d')} 至 {latest_date.strftime('%Y-%m-%d')}")
+            print(f"  最新收盘价: ${df['Close'].iloc[-1]:.2f}")
+            return df
+        else:
+            print(f"✗ {ticker} 返回空数据")
+            return None
+            
     except Exception as e:
-        print(f"获取数据失败: {e}")
-        print("切换到演示模式，使用模拟数据...")
-        return generate_sample_data(days)
+        print(f"✗ 获取数据失败: {e}")
+        if allow_demo:
+            print("⚠ 切换到演示模式，使用模拟数据...")
+            return generate_sample_data(days)
+        else:
+            print("⚠ 无法获取真实数据，程序将退出")
+            print("提示：请检查网络连接或稍后重试")
+            return None
 
 
 def generate_sample_data(days=30):
     """
-    生成示例数据用于演示
-    Generate sample data for demonstration
+    生成示例数据用于演示（仅在明确允许时使用）
+    Generate sample data for demonstration (only when explicitly allowed)
+    
+    ⚠️ 警告：此函数仅用于演示目的，不应用于生产环境
+    Warning: This function is for demonstration only, not for production use
     """
     dates = pd.date_range(end=datetime.now(), periods=days, freq='D')
     
@@ -61,6 +90,7 @@ def generate_sample_data(days=30):
     }
     
     df = pd.DataFrame(data, index=dates)
+    print("⚠️ 注意：当前使用的是模拟数据，非真实市场数据！")
     return df
 
 
@@ -722,18 +752,37 @@ def main():
     print("=" * 60)
     print("黄金盘前计划生成器")
     print("Gold Pre-Market Planning Generator")
+    print(f"当前时间: {datetime.now().strftime('%Y年%m月%d日 %H:%M:%S')}")
     print("=" * 60)
     print()
     
-    # 获取数据
+    # 获取数据（仅使用真实数据）
     print("正在获取黄金价格数据...")
-    df = fetch_gold_data()
+    print("⚠️  要求：仅使用真实市场数据，不使用模拟数据")
+    print()
+    
+    df = fetch_gold_data(allow_demo=False)
     
     if df is None or df.empty:
-        print("错误：无法获取数据")
-        return
+        print()
+        print("=" * 60)
+        print("✗ 错误：无法获取真实市场数据")
+        print("=" * 60)
+        print()
+        print("可能的原因：")
+        print("  1. 网络连接问题")
+        print("  2. Yahoo Finance API 暂时不可用")
+        print("  3. 数据代码不正确")
+        print()
+        print("建议：")
+        print("  - 检查网络连接")
+        print("  - 稍后重试")
+        print("  - 确认 yfinance 包已正确安装")
+        print()
+        return 1  # 返回错误码
     
-    print(f"成功获取 {len(df)} 条数据记录")
+    print()
+    print(f"✓ 成功获取 {len(df)} 条真实数据记录")
     
     # 计算技术指标
     print("正在计算技术指标...")
@@ -773,7 +822,11 @@ def main():
     print(f"  置信度：{trend_data['confidence']}%")
     print(f"  均线排列：{trend_data['analysis']['ma_alignment']}")
     print()
+    
+    return 0  # 返回成功码
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    exit_code = main()
+    sys.exit(exit_code if exit_code is not None else 0)

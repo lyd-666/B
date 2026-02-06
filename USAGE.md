@@ -1,5 +1,15 @@
 # 使用示例 | Usage Examples
 
+## ⚠️ 重要说明
+
+**本工具仅使用真实市场数据，不使用模拟数据**
+
+- 程序将从 Yahoo Finance 获取真实的黄金价格数据
+- 如果无法获取真实数据（如网络问题），程序将报错并退出
+- 请确保网络连接稳定且能访问 Yahoo Finance
+
+---
+
 ## 快速开始 | Quick Start
 
 ### 1. 安装依赖 | Install Dependencies
@@ -12,6 +22,43 @@ pip install -r requirements.txt
 
 ```bash
 python generate_premarket_plan.py
+```
+
+**成功运行示例：**
+```
+============================================================
+黄金盘前计划生成器
+Gold Pre-Market Planning Generator
+当前时间: 2026年02月06日 09:00:00
+============================================================
+
+正在获取黄金价格数据...
+⚠️  要求：仅使用真实市场数据，不使用模拟数据
+
+正在从 Yahoo Finance 获取真实数据 (GC=F)...
+✓ 成功获取真实数据
+  数据范围: 2026-01-07 至 2026-02-05
+  最新收盘价: $2720.50
+
+✓ 成功获取 30 条真实数据记录
+...
+```
+
+**失败情况示例：**
+```
+============================================================
+✗ 错误：无法获取真实市场数据
+============================================================
+
+可能的原因：
+  1. 网络连接问题
+  2. Yahoo Finance API 暂时不可用
+  3. 数据代码不正确
+
+建议：
+  - 检查网络连接
+  - 稍后重试
+  - 确认 yfinance 包已正确安装
 ```
 
 ### 3. 查看结果 | View Results
@@ -28,35 +75,34 @@ Open it in your browser to view the pre-market plan.
 
 ## 输出示例 | Output Example
 
-生成的HTML报告包含以下部分：
+生成的HTML报告包含以下部分（基于真实市场数据）：
 
 ### 1. 今日核心判断
-> 黄金于2675.62附近震荡，方向尚不明确。
+> 黄金维持多头格局，收于2720.50，短期均线支撑有效。
 
 ### 2. 趋势框架有效性
-- 最新收盘：$2675.62
-- 日内涨跌：+0.21%
+- 最新收盘：$2720.50 (真实数据)
+- 日内涨跌：+0.35%
 - 均线排列：多头排列
 - 波动状态：正常
 
 ### 3. 盘中关键触发条件
 
 **顺趋势情景：**
-- 区间高点接近区间高点附近做空
-- 区间低点附近做多
+- 价格守住MA5上方且创新高
+- 成交量配合放大，动能保持正向
 
 **观望情景：**
-- 价格位于区间中部，无明确方向
-- 等待放量突破或跌破
+- 价格在MA5与MA10之间震荡
+- 波动收窄，等待方向选择
 
 **结构失效情景：**
-- 放量突破近期震荡区间
-- 均线开始发散，形成新趋势
+- 有效跌破MA10
+- 连续两日收盘低于短期均线
 
 ### 4. 主要风险与判断失效点
 
 **主要风险：**
-- 动能偏弱，趋势延续性存疑
 - 需关注美元指数、美债收益率等宏观因子
 - 地缘政治事件可能引发剧烈波动
 
@@ -99,15 +145,44 @@ df['MA20'] = df['Close'].rolling(window=20).mean() # 20日均线
 
 ## 故障排除 | Troubleshooting
 
-### 网络连接问题
+### 无法获取真实数据
 
-如果无法连接到 Yahoo Finance 获取数据，程序会自动切换到演示模式，使用模拟数据生成报告。
+⚠️ **重要：本工具不使用模拟数据**
 
-```
-正在获取黄金价格数据...
-获取数据失败: ...
-切换到演示模式，使用模拟数据...
-```
+如果程序报错 "无法获取真实市场数据"，请按以下步骤排查：
+
+1. **检查网络连接**
+   ```bash
+   # 测试是否能访问 Yahoo Finance
+   curl -I https://finance.yahoo.com
+   ```
+
+2. **验证 yfinance 安装**
+   ```bash
+   pip install --upgrade yfinance
+   ```
+
+3. **测试数据获取**
+   ```bash
+   python3 -c "import yfinance as yf; print(yf.Ticker('GC=F').history(period='5d'))"
+   ```
+
+4. **查看详细错误**
+   程序会输出详细的错误信息，帮助诊断问题
+
+### 常见错误及解决方案
+
+**错误 1: "Could not resolve host"**
+- 原因：无法访问 Yahoo Finance 服务器
+- 解决：检查网络连接、防火墙设置、代理配置
+
+**错误 2: "返回空数据"**
+- 原因：数据代码可能不正确或市场休市
+- 解决：确认使用正确的数据代码（GC=F 或 XAUUSD=X）
+
+**错误 3: "Module not found"**
+- 原因：依赖包未安装
+- 解决：运行 `pip install -r requirements.txt`
 
 ### Python版本要求
 
@@ -123,9 +198,13 @@ python --version
 ## 技术说明 | Technical Details
 
 ### 数据来源
-- 主要数据源：GC=F (Gold Futures)
-- 备选数据源：XAUUSD=X (Gold Spot Price)
+
+⚠️ **仅使用真实市场数据**
+
+- 主要数据源：GC=F (Gold Futures) - 黄金期货
+- 备选数据源：XAUUSD=X (Gold Spot Price) - 黄金现货
 - 数据提供商：Yahoo Finance via yfinance
+- **不使用模拟数据或演示数据**
 
 ### 技术指标计算
 
@@ -157,10 +236,12 @@ python --version
 
 ## 免责声明 | Disclaimer
 
+⚠️ **本工具仅使用真实市场数据进行分析**
+
 本工具生成的分析报告仅供参考，不构成投资建议。
 
 投资有风险，入市需谨慎。请结合自身风险承受能力和其他信息源做出投资决策。
 
-This tool's analysis is for reference only and does not constitute investment advice.
+This tool uses only real market data for analysis and is for reference only. It does not constitute investment advice.
 
 Investment involves risks. Please make decisions based on your risk tolerance and other information sources.
