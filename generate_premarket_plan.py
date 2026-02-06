@@ -14,13 +14,13 @@ import pandas as pd
 import yfinance as yf
 
 
-def fetch_gold_data_from_web(days=30):
+def fetch_gold_data_from_web(days=365):
     """
     使用网络搜索获取黄金价格数据（备用方案）
     Fetch gold price data from web sources as fallback
     
     Args:
-        days: 获取天数
+        days: 获取天数，默认365天（一年）
     
     Returns:
         DataFrame with real market data from alternative sources
@@ -82,14 +82,14 @@ def fetch_gold_data_from_web(days=30):
         return None
 
 
-def fetch_gold_data(ticker="GC=F", days=30, allow_demo=False, use_web_fallback=True):
+def fetch_gold_data(ticker="GC=F", days=365, allow_demo=False, use_web_fallback=True):
     """
     获取黄金价格数据（仅使用真实数据）
     Fetch gold price data from yfinance (real data only)
     
     Args:
         ticker: 数据代码 (GC=F for futures, XAUUSD=X for spot)
-        days: 获取天数
+        days: 获取天数，默认365天（一年）
         allow_demo: 是否允许演示模式（默认False，仅使用真实数据）
         use_web_fallback: 是否使用网络备用数据源（默认True）
     
@@ -152,10 +152,13 @@ def fetch_gold_data(ticker="GC=F", days=30, allow_demo=False, use_web_fallback=T
             return None
 
 
-def generate_sample_data(days=30):
+def generate_sample_data(days=365):
     """
     生成示例数据用于演示（仅在明确允许时使用）
     Generate sample data for demonstration (only when explicitly allowed)
+    
+    Args:
+        days: 生成天数，默认365天（一年）
     
     ⚠️ 警告：此函数仅用于演示目的，不应用于生产环境
     Warning: This function is for demonstration only, not for production use
