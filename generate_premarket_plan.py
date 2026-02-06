@@ -5,10 +5,12 @@
 Gold Pre-Market Planning Generator
 """
 
-import yfinance as yf
-import pandas as pd
+import json
+from datetime import datetime, timezone, timedelta
+
 import numpy as np
-from datetime import datetime, timedelta
+import pandas as pd
+import yfinance as yf
 
 
 def fetch_gold_data(ticker="GC=F", days=30, allow_demo=False):
